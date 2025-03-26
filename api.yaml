@@ -185,9 +185,12 @@ paths:
                   type: string
                   description: The id of the track associated with the file
                   example: 1
-                uploadFile:
-                  type: string
-                  format: binary
+                uploadFiles:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                    description: A file with the session data
       responses:
         201:
           description: Session created successfully

@@ -48,7 +48,7 @@ class SessionControllerStepDefs {
         multipartBodyBuilder.part("userFirstName", requestData.first().userFirstName)
         multipartBodyBuilder.part("trackId", requestData.first().trackId.toString())
         multipartBodyBuilder.part("carId", requestData.first().carId.toString())
-        multipartBodyBuilder.part("uploadFile", FileSystemResource("testFiles/testFile.txt"))
+        multipartBodyBuilder.part("uploadFiles", FileSystemResource("testFiles/testFile.txt"))
         val multiPartData = multipartBodyBuilder.build()
 
         runBlocking {

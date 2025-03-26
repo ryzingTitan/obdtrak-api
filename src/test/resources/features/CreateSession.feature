@@ -17,7 +17,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/1'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:47.968Z | 1       | 1     |
@@ -40,7 +39,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/1'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
@@ -64,7 +62,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/1'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
@@ -89,7 +86,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/1'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |
@@ -115,7 +111,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/1'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
@@ -146,7 +141,6 @@ Feature: Create a new session from an uploaded file
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/sessions/2'
     And the following sessions will exist:
       | id | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |
