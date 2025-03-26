@@ -74,7 +74,8 @@ class SessionControllerTests {
                 multipartBodyBuilder.part("userFirstName", USER_FIRST_NAME)
                 multipartBodyBuilder.part("trackId", "2")
                 multipartBodyBuilder.part("carId", "3")
-                multipartBodyBuilder.part("uploadFile", FileSystemResource("testFiles/testFile.txt"))
+                multipartBodyBuilder.part("uploadFiles", FileSystemResource("testFiles/testFile.txt"))
+                multipartBodyBuilder.part("uploadFiles", FileSystemResource("testFiles/testFile.txt"))
                 val multiPartData = multipartBodyBuilder.build()
 
                 webTestClient
@@ -84,10 +85,8 @@ class SessionControllerTests {
                     .exchange()
                     .expectStatus()
                     .isCreated
-                    .expectHeader()
-                    .location("/api/sessions/$sessionId")
 
-                verify(mockSessionService, times(1)).create(any<FileUpload>())
+                verify(mockSessionService, times(2)).create(any<FileUpload>())
             }
     }
 
