@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Swagger spec for the Datalog API project
-  version: 5.0.0
+  version: 5.1.0
   title: datalog-api
 servers:
   - url: http://localhost:8080/api

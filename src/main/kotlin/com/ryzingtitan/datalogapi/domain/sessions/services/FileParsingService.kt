@@ -5,7 +5,6 @@ import com.ryzingtitan.datalogapi.domain.sessions.dtos.FileUpload
 import com.ryzingtitan.datalogapi.domain.sessions.dtos.FileUploadMetadata
 import kotlinx.coroutines.flow.map
 import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,7 +30,10 @@ class FileParsingService {
             fileData.append(reader.readText())
         }
 
-        CSVParser(fileData.toString().reader(), csvFormat).records.forEach { record ->
+        val reader = fileData.toString().reader()
+        val records = csvFormat.parse(reader)
+
+        records.forEach { record ->
             try {
                 val datalog = createDatalog(record, fileUpload.metadata)
                 datalogs.add(datalog)
@@ -95,5 +97,5 @@ class FileParsingService {
             .setHeader()
             .setSkipHeaderRecord(true)
             .setTrim(true)
-            .build()
+            .get()
 }
