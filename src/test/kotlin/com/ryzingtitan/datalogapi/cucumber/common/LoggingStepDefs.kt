@@ -34,12 +34,11 @@ class LoggingStepDefs {
     }
 
     @DataTableType
-    fun mapLogMessage(tableRow: Map<String, String>): LogMessage {
-        return LogMessage(
+    fun mapLogMessage(tableRow: Map<String, String>): LogMessage =
+        LogMessage(
             level = tableRow["level"].orEmpty(),
             message = tableRow["message"].orEmpty(),
         )
-    }
 
     @Before
     fun setup() {

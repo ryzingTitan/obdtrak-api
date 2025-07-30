@@ -11,7 +11,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 
-class SessionRepositoryStepDefs(private val sessionRepository: SessionRepository) {
+class SessionRepositoryStepDefs(
+    private val sessionRepository: SessionRepository,
+) {
     @Given("the following sessions exist:")
     fun givenTheFollowingSessionsExist(table: DataTable) {
         val sessions = table.tableConverter.toList<SessionEntity>(table, SessionEntity::class.java)
@@ -36,8 +38,8 @@ class SessionRepositoryStepDefs(private val sessionRepository: SessionRepository
     }
 
     @DataTableType
-    fun mapSessionEntity(tableRow: Map<String, String>): SessionEntity {
-        return SessionEntity(
+    fun mapSessionEntity(tableRow: Map<String, String>): SessionEntity =
+        SessionEntity(
             id = tableRow["id"]?.toIntOrNull(),
             userEmail = tableRow["userEmail"].orEmpty(),
             userFirstName = tableRow["userFirstName"].orEmpty(),
@@ -47,5 +49,4 @@ class SessionRepositoryStepDefs(private val sessionRepository: SessionRepository
             trackId = tableRow["trackId"]!!.toInt(),
             carId = tableRow["carId"]!!.toInt(),
         )
-    }
 }

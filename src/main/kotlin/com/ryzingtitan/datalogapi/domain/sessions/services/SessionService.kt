@@ -24,8 +24,8 @@ class SessionService(
     private val fileParsingService: FileParsingService,
     private val datalogRepository: DatalogRepository,
 ) {
-    suspend fun getAllByUser(userEmail: String): Flow<Session> {
-        return sessionRepository.findAllByUserEmail(userEmail).map { sessionEntity ->
+    suspend fun getAllByUser(userEmail: String): Flow<Session> =
+        sessionRepository.findAllByUserEmail(userEmail).map { sessionEntity ->
             val trackEntity = trackRepository.findById(sessionEntity.trackId)!!
             val carEntity = carRepository.findById(sessionEntity.carId)!!
 
@@ -41,7 +41,6 @@ class SessionService(
                 carModel = carEntity.model,
             )
         }
-    }
 
     suspend fun create(fileUpload: FileUpload): Int {
         val datalogs = fileParsingService.parse(fileUpload)
@@ -62,17 +61,18 @@ class SessionService(
         }
 
         val sessionId =
-            sessionRepository.save(
-                SessionEntity(
-                    userEmail = fileUpload.metadata.userEmail,
-                    userFirstName = fileUpload.metadata.userFirstName,
-                    userLastName = fileUpload.metadata.userLastName,
-                    startTime = firstDatalogTimestamp,
-                    endTime = lastDatalogTimestamp,
-                    trackId = fileUpload.metadata.trackId,
-                    carId = fileUpload.metadata.carId,
-                ),
-            ).id!!
+            sessionRepository
+                .save(
+                    SessionEntity(
+                        userEmail = fileUpload.metadata.userEmail,
+                        userFirstName = fileUpload.metadata.userFirstName,
+                        userLastName = fileUpload.metadata.userLastName,
+                        startTime = firstDatalogTimestamp,
+                        endTime = lastDatalogTimestamp,
+                        trackId = fileUpload.metadata.trackId,
+                        carId = fileUpload.metadata.carId,
+                    ),
+                ).id!!
 
         datalogRepository.saveAll(datalogs.map { it.copy(sessionId = sessionId) }).collect()
 

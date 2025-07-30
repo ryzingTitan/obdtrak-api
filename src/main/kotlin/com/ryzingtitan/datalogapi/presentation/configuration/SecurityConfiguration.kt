@@ -16,7 +16,8 @@ class SecurityConfiguration {
     fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         http
             .authorizeExchange { exchange ->
-                exchange.pathMatchers(HttpMethod.OPTIONS, "/api/**")
+                exchange
+                    .pathMatchers(HttpMethod.OPTIONS, "/api/**")
                     .permitAll()
                     .pathMatchers(HttpMethod.GET, "/api/sessions/**")
                     .authenticated()
@@ -44,8 +45,7 @@ class SecurityConfiguration {
                     .permitAll()
                     .pathMatchers("/**")
                     .denyAll()
-            }
-            .httpBasic { it.disable() }
+            }.httpBasic { it.disable() }
             .formLogin { it.disable() }
             .logout { it.disable() }
             .oauth2ResourceServer { it.jwt { Customizer.withDefaults<JwtSpec>() } }

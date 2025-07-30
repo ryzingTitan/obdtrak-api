@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class CarRepositoryStepDefs(private val carRepository: CarRepository) {
+class CarRepositoryStepDefs(
+    private val carRepository: CarRepository,
+) {
     @Given("the following cars exist:")
     fun givenTheFollowingCarsExist(table: DataTable) {
         val cars = table.tableConverter.toList<CarEntity>(table, CarEntity::class.java)
@@ -35,12 +37,11 @@ class CarRepositoryStepDefs(private val carRepository: CarRepository) {
     }
 
     @DataTableType
-    fun mapCarEntity(tableRow: Map<String, String>): CarEntity {
-        return CarEntity(
+    fun mapCarEntity(tableRow: Map<String, String>): CarEntity =
+        CarEntity(
             id = tableRow["id"]?.toIntOrNull(),
             yearManufactured = tableRow["yearManufactured"]!!.toInt(),
             make = tableRow["make"].orEmpty(),
             model = tableRow["model"].orEmpty(),
         )
-    }
 }

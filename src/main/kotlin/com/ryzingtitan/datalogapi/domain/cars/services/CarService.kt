@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class CarService(private val carRepository: CarRepository) {
+class CarService(
+    private val carRepository: CarRepository,
+) {
     suspend fun create(car: Car): Int? {
         val existingCar = carRepository.findByYearManufacturedAndMakeAndModel(car.year, car.make, car.model)
 
@@ -23,13 +25,14 @@ class CarService(private val carRepository: CarRepository) {
         }
 
         val carId =
-            carRepository.save(
-                CarEntity(
-                    yearManufactured = car.year,
-                    make = car.make,
-                    model = car.model,
-                ),
-            ).id
+            carRepository
+                .save(
+                    CarEntity(
+                        yearManufactured = car.year,
+                        make = car.make,
+                        model = car.model,
+                    ),
+                ).id
 
         logger.info("Created car ${car.year} ${car.make} ${car.model}")
 

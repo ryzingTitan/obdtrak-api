@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit
 
 @Service
-class DatalogService(private val datalogRepository: DatalogRepository) {
-    suspend fun getAllBySessionId(sessionId: Int): Flow<Datalog> {
-        return datalogRepository
+class DatalogService(
+    private val datalogRepository: DatalogRepository,
+) {
+    suspend fun getAllBySessionId(sessionId: Int): Flow<Datalog> =
+        datalogRepository
             .findAllBySessionIdOrderByTimestampAsc(sessionId)
             .map { datalogEntity ->
                 Datalog(
@@ -28,5 +30,4 @@ class DatalogService(private val datalogRepository: DatalogRepository) {
                     datalogEntity.airFuelRatio,
                 )
             }
-    }
 }

@@ -5,7 +5,9 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.await
 
-class CommonRepositoryStepDefs(private val databaseClient: DatabaseClient) {
+class CommonRepositoryStepDefs(
+    private val databaseClient: DatabaseClient,
+) {
     @After
     fun resetDatabase() {
         runBlocking {

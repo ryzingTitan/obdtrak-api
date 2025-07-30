@@ -25,14 +25,14 @@ class SessionControllerStepDefs {
     @When("the sessions are retrieved for user {string}")
     fun whenTheSessionsAreRetrievedForUser(userEmail: String) {
         runBlocking {
-            CommonControllerStepDefs.webClient.get()
+            CommonControllerStepDefs.webClient
+                .get()
                 .uri("/sessions?userEmail=$userEmail")
                 .accept(MediaType.APPLICATION_JSON)
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleMultipleSessionResponse(clientResponse)
                 }
         }
@@ -59,8 +59,7 @@ class SessionControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleSessionResponse(clientResponse)
                 }
         }
@@ -90,8 +89,7 @@ class SessionControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleSessionResponse(clientResponse)
                 }
         }
@@ -105,19 +103,18 @@ class SessionControllerStepDefs {
     }
 
     @DataTableType
-    fun mapRequestData(tableRow: Map<String, String>): RequestData {
-        return RequestData(
+    fun mapRequestData(tableRow: Map<String, String>): RequestData =
+        RequestData(
             trackId = tableRow["trackId"].orEmpty(),
             carId = tableRow["carId"].orEmpty(),
             userFirstName = tableRow["userFirstName"].orEmpty(),
             userLastName = tableRow["userLastName"].orEmpty(),
             userEmail = tableRow["userEmail"].orEmpty(),
         )
-    }
 
     @DataTableType
-    fun mapSession(tableRow: Map<String, String>): Session {
-        return Session(
+    fun mapSession(tableRow: Map<String, String>): Session =
+        Session(
             id = tableRow["id"]!!.toInt(),
             startTime = Instant.parse(tableRow["startTime"].orEmpty()),
             endTime = Instant.parse(tableRow["endTime"].orEmpty()),
@@ -128,7 +125,6 @@ class SessionControllerStepDefs {
             carMake = tableRow["carMake"].orEmpty(),
             carModel = tableRow["carModel"].orEmpty(),
         )
-    }
 
     private fun handleSessionResponse(clientResponse: ClientResponse) {
         responseStatus = clientResponse.statusCode() as HttpStatus
