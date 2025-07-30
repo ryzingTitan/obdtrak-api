@@ -2,11 +2,11 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
-    id("org.springframework.boot") version "3.4.5"
+    id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("jvm") version "2.0.21"
     kotlin("plugin.spring") version "2.0.21"
-    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("com.github.ben-manes.versions") version "0.52.0"
     jacoco
@@ -32,29 +32,24 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
+    implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.3")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.liquibase:liquibase-core")
-    implementation("org.apache.commons:commons-csv:1.14.0")
-    implementation("com.google.cloud.sql:cloud-sql-connector-r2dbc-postgres:1.25.0")
-    implementation("com.google.cloud.sql:cloud-sql-connector-jdbc-sqlserver:1.25.0")
-    implementation("com.google.cloud.sql:postgres-socket-factory:1.25.0")
+    implementation("org.apache.commons:commons-csv:1.14.1")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
-    testImplementation("org.junit.platform:junit-platform-suite-api:1.12.2")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    testImplementation("org.junit.platform:junit-platform-suite-api:1.13.4")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:6.0.0")
     testImplementation("io.cucumber:cucumber-java:7.22.2")
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.22.2")
     testImplementation("io.cucumber:cucumber-spring:7.22.2")
-    testImplementation("io.projectreactor:reactor-test:3.7.6")
-    testImplementation("no.nav.security:mock-oauth2-server:2.1.11")
+    testImplementation("io.projectreactor:reactor-test:3.7.8")
+    testImplementation("no.nav.security:mock-oauth2-server:2.2.1")
     testRuntimeOnly("com.h2database:h2")
     testRuntimeOnly("io.r2dbc:r2dbc-h2")
 }

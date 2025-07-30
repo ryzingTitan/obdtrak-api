@@ -18,11 +18,11 @@ import org.springframework.web.server.ServerWebExchange
 
 @RestController
 @RequestMapping(path = ["/api/tracks"])
-class TrackController(private val trackService: TrackService) {
+class TrackController(
+    private val trackService: TrackService,
+) {
     @GetMapping
-    fun getTracks(): Flow<Track> {
-        return trackService.getAll()
-    }
+    fun getTracks(): Flow<Track> = trackService.getAll()
 
     @PostMapping
     suspend fun createTrack(

@@ -27,13 +27,14 @@ class TrackService(
         }
 
         val trackId =
-            trackRepository.save(
-                TrackEntity(
-                    name = track.name,
-                    longitude = track.longitude,
-                    latitude = track.latitude,
-                ),
-            ).id
+            trackRepository
+                .save(
+                    TrackEntity(
+                        name = track.name,
+                        longitude = track.longitude,
+                        latitude = track.latitude,
+                    ),
+                ).id
 
         logger.info("Created track named ${track.name}")
 

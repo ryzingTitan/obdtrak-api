@@ -27,8 +27,7 @@ class CarControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleMultipleCarResponse(clientResponse)
                 }
         }
@@ -46,8 +45,7 @@ class CarControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleCarResponse(clientResponse)
                 }
         }
@@ -65,8 +63,7 @@ class CarControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleCarResponse(clientResponse)
                 }
         }
@@ -81,8 +78,7 @@ class CarControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleCarResponse(clientResponse)
                 }
         }
@@ -102,14 +98,13 @@ class CarControllerStepDefs {
     }
 
     @DataTableType
-    fun mapCar(tableRow: Map<String, String>): Car {
-        return Car(
+    fun mapCar(tableRow: Map<String, String>): Car =
+        Car(
             id = tableRow["id"]?.toIntOrNull(),
             year = tableRow["year"]!!.toInt(),
             make = tableRow["make"].orEmpty(),
             model = tableRow["model"].orEmpty(),
         )
-    }
 
     private suspend fun handleMultipleCarResponse(clientResponse: ClientResponse) {
         CommonControllerStepDefs.responseStatus = clientResponse.statusCode() as HttpStatus

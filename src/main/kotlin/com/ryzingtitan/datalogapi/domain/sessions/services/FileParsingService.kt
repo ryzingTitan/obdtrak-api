@@ -24,11 +24,12 @@ class FileParsingService {
         val datalogs = mutableListOf<DatalogEntity>()
         val fileData = StringBuilder()
 
-        fileUpload.file.map { dataBuffer ->
-            dataBuffer.asInputStream().bufferedReader()
-        }.collect { reader ->
-            fileData.append(reader.readText())
-        }
+        fileUpload.file
+            .map { dataBuffer ->
+                dataBuffer.asInputStream().bufferedReader()
+            }.collect { reader ->
+                fileData.append(reader.readText())
+            }
 
         val reader = fileData.toString().reader()
         val records = csvFormat.parse(reader)

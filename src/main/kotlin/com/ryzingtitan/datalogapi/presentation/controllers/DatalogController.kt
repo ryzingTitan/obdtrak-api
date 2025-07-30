@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(path = ["/api/sessions"])
-class DatalogController(private val datalogService: DatalogService) {
+class DatalogController(
+    private val datalogService: DatalogService,
+) {
     private val logger = LoggerFactory.getLogger(DatalogController::class.java)
 
     @GetMapping("/{sessionId}/datalogs")

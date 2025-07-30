@@ -41,8 +41,8 @@ class DatalogRepositoryStepDefs(
     }
 
     @DataTableType
-    fun mapDatalogEntity(tableRow: Map<String, String>): DatalogEntity {
-        return DatalogEntity(
+    fun mapDatalogEntity(tableRow: Map<String, String>): DatalogEntity =
+        DatalogEntity(
             id = tableRow["id"]?.toLong(),
             sessionId = tableRow["sessionId"]?.toInt(),
             timestamp = Instant.parse(tableRow["timestamp"].orEmpty()),
@@ -57,5 +57,4 @@ class DatalogRepositoryStepDefs(
             throttlePosition = tableRow["throttlePosition"]?.toFloatOrNull(),
             airFuelRatio = tableRow["airFuelRatio"]?.toFloatOrNull(),
         )
-    }
 }

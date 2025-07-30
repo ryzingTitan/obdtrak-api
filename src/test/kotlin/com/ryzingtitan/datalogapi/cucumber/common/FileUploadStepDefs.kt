@@ -26,13 +26,11 @@ class FileUploadStepDefs {
         return listOf(headerLine.toString().trimEnd(','))
     }
 
-    private fun createDataRows(table: DataTable): List<String> {
-        return table.tableConverter.toList(table, String::class.java)
-    }
+    private fun createDataRows(table: DataTable): List<String> = table.tableConverter.toList(table, String::class.java)
 
     @DataTableType
-    fun mapFileLine(tableRow: Map<String, String>): String {
-        return "${tableRow["Device Time"]}," +
+    fun mapFileLine(tableRow: Map<String, String>): String =
+        "${tableRow["Device Time"]}," +
             "${tableRow["Longitude"]}," +
             "${tableRow["Latitude"]}," +
             "${tableRow["Altitude"]}," +
@@ -43,7 +41,6 @@ class FileUploadStepDefs {
             "${tableRow["Throttle Position(Manifold)(%)"]}," +
             "${tableRow["Turbo Boost & Vacuum Gauge(psi)"]}," +
             tableRow["Air Fuel Ratio(Measured)(:1)"].orEmpty()
-    }
 
     @Before
     fun setup() {

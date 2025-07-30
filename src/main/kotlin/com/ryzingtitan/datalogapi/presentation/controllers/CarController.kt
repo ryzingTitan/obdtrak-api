@@ -18,11 +18,11 @@ import org.springframework.web.server.ServerWebExchange
 
 @RestController
 @RequestMapping(path = ["/api/cars"])
-class CarController(private val careService: CarService) {
+class CarController(
+    private val careService: CarService,
+) {
     @GetMapping
-    fun getCars(): Flow<Car> {
-        return careService.getAll()
-    }
+    fun getCars(): Flow<Car> = careService.getAll()
 
     @PostMapping
     suspend fun createCar(

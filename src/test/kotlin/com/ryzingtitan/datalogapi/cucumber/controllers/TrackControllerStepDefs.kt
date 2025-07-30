@@ -27,8 +27,7 @@ class TrackControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleMultipleTrackResponse(clientResponse)
                 }
         }
@@ -46,8 +45,7 @@ class TrackControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleTrackResponse(clientResponse)
                 }
         }
@@ -65,8 +63,7 @@ class TrackControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleTrackResponse(clientResponse)
                 }
         }
@@ -81,8 +78,7 @@ class TrackControllerStepDefs {
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
-                )
-                .awaitExchange { clientResponse ->
+                ).awaitExchange { clientResponse ->
                     handleTrackResponse(clientResponse)
                 }
         }
@@ -102,14 +98,13 @@ class TrackControllerStepDefs {
     }
 
     @DataTableType
-    fun mapTrack(tableRow: Map<String, String>): Track {
-        return Track(
+    fun mapTrack(tableRow: Map<String, String>): Track =
+        Track(
             id = tableRow["id"]?.toIntOrNull(),
             name = tableRow["name"].orEmpty(),
             longitude = tableRow["longitude"]!!.toDouble(),
             latitude = tableRow["latitude"]!!.toDouble(),
         )
-    }
 
     private suspend fun handleMultipleTrackResponse(clientResponse: ClientResponse) {
         CommonControllerStepDefs.responseStatus = clientResponse.statusCode() as HttpStatus
