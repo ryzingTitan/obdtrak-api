@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory
 class LoggingStepDefs {
     @Then("the application will log the following messages:")
     fun theApplicationWilLogTheFollowingMessages(table: DataTable) {
-        val expectedLogMessages: List<LogMessage> = table.tableConverter.toList(table, LogMessage::class.java)
+        val expectedLogMessages = table.asList(LogMessage::class.java)
 
         val actualLogMessages = ArrayList<LogMessage>()
 

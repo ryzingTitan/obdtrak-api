@@ -15,7 +15,7 @@ class TrackRepositoryStepDefs(
 ) {
     @Given("the following tracks exist:")
     fun givenTheFollowingTracksExist(table: DataTable) {
-        val tracks = table.tableConverter.toList<TrackEntity>(table, TrackEntity::class.java)
+        val tracks = table.asList(TrackEntity::class.java)
 
         runBlocking {
             trackRepository.saveAll(tracks).collect()
@@ -24,7 +24,7 @@ class TrackRepositoryStepDefs(
 
     @Then("the following tracks will exist:")
     fun thenTheFollowingTracksWillExist(table: DataTable) {
-        val expectedTracks = table.tableConverter.toList<TrackEntity>(table, TrackEntity::class.java)
+        val expectedTracks = table.asList(TrackEntity::class.java)
 
         val actualTracks = mutableListOf<TrackEntity>()
         runBlocking {

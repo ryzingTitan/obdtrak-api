@@ -1,4 +1,4 @@
-package com.ryzingtitan.datalogapi.cucumber.repositories
+package com.ryzingtitan.datalogapi.cucumber.common
 
 import io.cucumber.java.After
 import kotlinx.coroutines.runBlocking

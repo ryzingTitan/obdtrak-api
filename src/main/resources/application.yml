@@ -1,8 +1,21 @@
 spring:
-  profiles:
-    active: ${ENVIRONMENT}
   application:
     name: datalog-api
+  liquibase:
+    url: jdbc:postgresql://${DB_HOST}:5432/datalog_api?schema=datalog_api
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}
+    default-schema: datalog_api
+    liquibase-schema: datalog_api
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST}:5432/datalog_api?schema=datalog_api
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
 
 server:
   port: 8080
@@ -14,66 +27,3 @@ management:
         include: health
   server:
     port: 8081
-
----
-spring:
-  config:
-    activate:
-      on-profile: cloud
-  liquibase:
-    url: jdbc:postgresql:///datalog_api?schema=datalog_api&cloudSqlInstance=ks-gcp-project-380005:us-central1:datalog-db&socketFactory=com.google.cloud.sql.postgres.SocketFactory
-    user: ${DB_USER}
-    password: ${DB_PASSWORD}
-    default-schema: datalog_api
-    liquibase-schema: datalog_api
-  r2dbc:
-    url: r2dbc:gcp:postgres://${DB_USER}:${DB_PASSWORD}@ks-gcp-project-380005:us-central1:datalog-db/datalog_api?schema=datalog_api
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://accounts.google.com
-
----
-spring:
-  config:
-    activate:
-      on-profile: test
-  liquibase:
-    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DATALOG_API
-    user: sa
-    password: sa
-    default-schema: datalog_api
-    liquibase-schema: datalog_api
-  r2dbc:
-    url: r2dbc:h2:mem:///db?options=DB_CLOSE_DELAY=-1;SCHEMA=datalog_api
-    username: sa
-    password: sa
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8088/default
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
-  liquibase:
-    url: jdbc:postgresql://localhost:5432/datalog_api?schema=datalog_api
-    user: postgres
-    password: password
-    default-schema: datalog_api
-    liquibase-schema: datalog_api
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/datalog_api?schema=datalog_api
-    username: postgres
-    password: password
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://accounts.google.com

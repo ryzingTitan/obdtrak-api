@@ -40,7 +40,7 @@ class SessionControllerStepDefs {
 
     @When("the file is uploaded for a session with the following data:")
     fun theFileIsUploadedForSessionWithTheFollowingData(table: DataTable) {
-        val requestData = table.tableConverter.toList<RequestData>(table, RequestData::class.java)
+        val requestData = table.asList(RequestData::class.java)
 
         val multipartBodyBuilder = MultipartBodyBuilder()
         multipartBodyBuilder.part("userEmail", requestData.first().userEmail)
@@ -70,7 +70,7 @@ class SessionControllerStepDefs {
         sessionId: Int,
         table: DataTable,
     ) {
-        val requestData = table.tableConverter.toList<RequestData>(table, RequestData::class.java)
+        val requestData = table.asList(RequestData::class.java)
 
         val multipartBodyBuilder = MultipartBodyBuilder()
         multipartBodyBuilder.part("userEmail", requestData.first().userEmail)
@@ -97,7 +97,7 @@ class SessionControllerStepDefs {
 
     @Then("the following sessions are returned:")
     fun thenTheFollowingSessionsAreReturned(table: DataTable) {
-        val expectedSessions = table.tableConverter.toList<Session>(table, Session::class.java)
+        val expectedSessions = table.asList(Session::class.java)
 
         assertEquals(expectedSessions, returnedSessions)
     }

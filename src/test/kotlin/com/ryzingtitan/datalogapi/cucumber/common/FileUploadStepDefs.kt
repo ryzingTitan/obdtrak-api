@@ -9,7 +9,7 @@ import java.nio.file.Path
 
 class FileUploadStepDefs {
     @Given("a file with the following rows:")
-    fun givenAFileWithTheFollowingData(table: DataTable) {
+    fun givenFileWithTheFollowingData(table: DataTable) {
         val fileLines = mutableListOf<String>()
         fileLines.addAll(createHeaderRow(table))
         fileLines.addAll(createDataRows(table))
@@ -26,7 +26,7 @@ class FileUploadStepDefs {
         return listOf(headerLine.toString().trimEnd(','))
     }
 
-    private fun createDataRows(table: DataTable): List<String> = table.tableConverter.toList(table, String::class.java)
+    private fun createDataRows(table: DataTable): List<String> = table.asList(String::class.java)
 
     @DataTableType
     fun mapFileLine(tableRow: Map<String, String>): String =
