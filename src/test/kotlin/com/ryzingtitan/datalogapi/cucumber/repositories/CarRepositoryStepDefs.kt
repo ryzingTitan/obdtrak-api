@@ -15,7 +15,7 @@ class CarRepositoryStepDefs(
 ) {
     @Given("the following cars exist:")
     fun givenTheFollowingCarsExist(table: DataTable) {
-        val cars = table.tableConverter.toList<CarEntity>(table, CarEntity::class.java)
+        val cars = table.asList(CarEntity::class.java)
 
         runBlocking {
             carRepository.saveAll(cars).collect()
@@ -24,7 +24,7 @@ class CarRepositoryStepDefs(
 
     @Then("the following cars will exist:")
     fun thenTheFollowingCarsWillExist(table: DataTable) {
-        val expectedCars = table.tableConverter.toList<CarEntity>(table, CarEntity::class.java)
+        val expectedCars = table.asList(CarEntity::class.java)
 
         val actualCars = mutableListOf<CarEntity>()
         runBlocking {

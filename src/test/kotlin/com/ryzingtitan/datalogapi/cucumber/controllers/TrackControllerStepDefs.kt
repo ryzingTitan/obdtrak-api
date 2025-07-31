@@ -86,7 +86,7 @@ class TrackControllerStepDefs {
 
     @Then("the following tracks are returned:")
     fun thenTheFollowingTracksAreReturned(table: DataTable) {
-        val expectedTracks = table.tableConverter.toList<Track>(table, Track::class.java)
+        val expectedTracks = table.asList(Track::class.java)
 
         assertEquals(expectedTracks, returnedTracks)
     }

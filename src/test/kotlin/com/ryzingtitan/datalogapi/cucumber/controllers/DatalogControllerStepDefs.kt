@@ -34,7 +34,7 @@ class DatalogControllerStepDefs {
 
     @Then("the following datalogs are returned:")
     fun thenTheFollowingDatalogsAreReturned(table: DataTable) {
-        val expectedDatalogs = table.tableConverter.toList<Datalog>(table, Datalog::class.java)
+        val expectedDatalogs = table.asList(Datalog::class.java)
 
         assertEquals(expectedDatalogs, returnedDatalogs)
     }

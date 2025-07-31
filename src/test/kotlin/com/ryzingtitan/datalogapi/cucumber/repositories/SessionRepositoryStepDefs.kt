@@ -16,7 +16,7 @@ class SessionRepositoryStepDefs(
 ) {
     @Given("the following sessions exist:")
     fun givenTheFollowingSessionsExist(table: DataTable) {
-        val sessions = table.tableConverter.toList<SessionEntity>(table, SessionEntity::class.java)
+        val sessions = table.asList(SessionEntity::class.java)
 
         runBlocking {
             sessionRepository.saveAll(sessions).collect()
@@ -25,7 +25,7 @@ class SessionRepositoryStepDefs(
 
     @Then("the following sessions will exist:")
     fun thenTheFollowingSessionsWillExist(table: DataTable) {
-        val expectedSessions = table.tableConverter.toList<SessionEntity>(table, SessionEntity::class.java)
+        val expectedSessions = table.asList(SessionEntity::class.java)
 
         val actualSessions = mutableListOf<SessionEntity>()
         runBlocking {

@@ -15,8 +15,7 @@ class DatalogRepositoryStepDefs(
 ) {
     @Given("the following datalogs exist:")
     fun givenTheFollowingDatalogsExist(table: DataTable) {
-        val datalogEntities =
-            table.tableConverter.toList<DatalogEntity>(table, DatalogEntity::class.java)
+        val datalogEntities = table.asList(DatalogEntity::class.java)
 
         datalogEntities.forEach { datalog ->
             runBlocking {
@@ -27,8 +26,7 @@ class DatalogRepositoryStepDefs(
 
     @Then("the following datalogs will exist:")
     fun thenTheFollowingDatalogsWillExist(table: DataTable) {
-        val expectedDatalogs =
-            table.tableConverter.toList<DatalogEntity>(table, DatalogEntity::class.java)
+        val expectedDatalogs = table.asList(DatalogEntity::class.java)
 
         val actualDatalogs = mutableListOf<DatalogEntity>()
         runBlocking {

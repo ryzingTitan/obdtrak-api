@@ -35,7 +35,7 @@ class CarControllerStepDefs {
 
     @When("the following car is created:")
     fun whenTheFollowingCarIsCreated(table: DataTable) {
-        val car = table.tableConverter.toList<Car>(table, Car::class.java).first()
+        val car = table.asList(Car::class.java).first()
 
         runBlocking {
             CommonControllerStepDefs.webClient
@@ -53,7 +53,7 @@ class CarControllerStepDefs {
 
     @When("the following car is updated:")
     fun whenTheFollowingCarIsUpdated(table: DataTable) {
-        val car = table.tableConverter.toList<Car>(table, Car::class.java).first()
+        val car = table.asList(Car::class.java).first()
 
         runBlocking {
             CommonControllerStepDefs.webClient
@@ -86,7 +86,7 @@ class CarControllerStepDefs {
 
     @Then("the following cars are returned:")
     fun thenTheFollowingCarsAreReturned(table: DataTable) {
-        val expectedCars = table.tableConverter.toList<Car>(table, Car::class.java)
+        val expectedCars = table.asList(Car::class.java)
 
         assertEquals(expectedCars, returnedCars)
     }
