@@ -8,11 +8,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.awaitEntity
 import org.springframework.web.reactive.function.client.awaitEntityList
 import org.springframework.web.reactive.function.client.awaitExchange
 
@@ -91,10 +91,15 @@ class CarControllerStepDefs {
         assertEquals(expectedCars, returnedCars)
     }
 
-    private fun handleCarResponse(clientResponse: ClientResponse) {
+    private suspend fun handleCarResponse(clientResponse: ClientResponse) {
         CommonControllerStepDefs.responseStatus = clientResponse.statusCode() as HttpStatus
-        CommonControllerStepDefs.locationHeader =
-            clientResponse.headers().header(HttpHeaders.LOCATION).firstOrNull() ?: ""
+        if (clientResponse.statusCode().is2xxSuccessful) {
+            val car = clientResponse.awaitEntity<Car>().body
+
+            if (car != null) {
+                returnedCars.add(car)
+            }
+        }
     }
 
     @DataTableType

@@ -14,6 +14,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
 
 class TrackControllerTests {
@@ -43,7 +44,7 @@ class TrackControllerTests {
         @Test
         fun `returns 'CREATED' status and creates new track`() =
             runTest {
-                whenever(mockTrackService.create(firstTrack.copy(id = null))).thenReturn(FIRST_TRACK_ID)
+                whenever(mockTrackService.create(firstTrack.copy(id = null))).thenReturn(firstTrack)
 
                 webTestClient
                     .mutateWith(mockJwt())
@@ -54,8 +55,8 @@ class TrackControllerTests {
                     .exchange()
                     .expectStatus()
                     .isCreated
-                    .expectHeader()
-                    .location("/api/tracks/$FIRST_TRACK_ID")
+                    .expectBody<Track>()
+                    .isEqualTo(firstTrack)
 
                 verify(mockTrackService, times(1)).create(firstTrack.copy(id = null))
             }
@@ -66,6 +67,8 @@ class TrackControllerTests {
         @Test
         fun `returns 'OK' status and updates track`() =
             runTest {
+                whenever(mockTrackService.update(firstTrack)).thenReturn(firstTrack)
+
                 webTestClient
                     .mutateWith(mockJwt())
                     .put()
@@ -75,6 +78,8 @@ class TrackControllerTests {
                     .exchange()
                     .expectStatus()
                     .isOk
+                    .expectBody<Track>()
+                    .isEqualTo(firstTrack)
 
                 verify(mockTrackService, times(1)).update(firstTrack)
             }
@@ -86,7 +91,7 @@ class TrackControllerTests {
         fun `returns 'OK' status and deletes track`() =
             runTest {
                 webTestClient
-//                    .mutateWith(mockJwt())
+                    .mutateWith(mockJwt())
                     .delete()
                     .uri("/api/tracks/$FIRST_TRACK_ID")
                     .accept(MediaType.APPLICATION_JSON)

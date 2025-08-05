@@ -4,6 +4,12 @@ import com.ryzingtitan.datalogapi.domain.sessions.dtos.FileUpload
 import com.ryzingtitan.datalogapi.domain.sessions.dtos.FileUploadMetadata
 import com.ryzingtitan.datalogapi.domain.sessions.dtos.Session
 import com.ryzingtitan.datalogapi.domain.sessions.services.SessionService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.collect
@@ -27,6 +33,27 @@ class SessionController(
     private val sessionService: SessionService,
 ) {
     @GetMapping
+    @Tag(name = "Session")
+    @Operation(summary = "Retrieve all sessions")
+    @SecurityRequirement(name = "jwt")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "The list of sessions",
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized - Ensure the authorization token is valid",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = arrayOf(Content()),
+            ),
+        ],
+    )
     suspend fun getAllSessionsByUser(
         @RequestParam userEmail: String,
     ): Flow<Session> {
@@ -37,6 +64,37 @@ class SessionController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Suppress("LongParameterList")
+    @Tag(name = "Session Administration")
+    @Operation(summary = "Create a new session")
+    @SecurityRequirement(name = "jwt")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201",
+                description = "Session created successfully",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request - Ensure the request contains all required data",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized - Ensure the authorization token is valid",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "409",
+                description = "Conflict - Session already exists",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = arrayOf(Content()),
+            ),
+        ],
+    )
     suspend fun createSession(
         @RequestPart(name = "userEmail") userEmail: String,
         @RequestPart(name = "userFirstName") userFirstName: String,
@@ -66,6 +124,37 @@ class SessionController(
 
     @PutMapping("/{sessionId}")
     @Suppress("LongParameterList")
+    @Tag(name = "Session Administration")
+    @Operation(summary = "Update an existing session")
+    @SecurityRequirement(name = "jwt")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Session updated successfully",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request - Ensure the request contains all required data",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized - Ensure the authorization token is valid",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Not Found - Session does not exist",
+                content = arrayOf(Content()),
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = arrayOf(Content()),
+            ),
+        ],
+    )
     suspend fun updateSession(
         @RequestPart(name = "userEmail") userEmail: String,
         @RequestPart(name = "userFirstName") userFirstName: String,

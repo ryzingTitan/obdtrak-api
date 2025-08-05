@@ -14,6 +14,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
 
 class CarControllerTests {
@@ -43,7 +44,7 @@ class CarControllerTests {
         @Test
         fun `returns 'CREATED' status and creates new car`() =
             runTest {
-                whenever(mockCarService.create(firstCar.copy(id = null))).thenReturn(FIRST_CAR_ID)
+                whenever(mockCarService.create(firstCar.copy(id = null))).thenReturn(firstCar)
 
                 webTestClient
                     .mutateWith(mockJwt())
@@ -54,8 +55,8 @@ class CarControllerTests {
                     .exchange()
                     .expectStatus()
                     .isCreated
-                    .expectHeader()
-                    .location("/api/cars/$FIRST_CAR_ID")
+                    .expectBody<Car>()
+                    .isEqualTo(firstCar)
 
                 verify(mockCarService, times(1)).create(firstCar.copy(id = null))
             }
@@ -66,6 +67,8 @@ class CarControllerTests {
         @Test
         fun `returns 'OK' status and updates car`() =
             runTest {
+                whenever(mockCarService.update(firstCar)).thenReturn(firstCar)
+
                 webTestClient
                     .mutateWith(mockJwt())
                     .put()
@@ -75,6 +78,8 @@ class CarControllerTests {
                     .exchange()
                     .expectStatus()
                     .isOk
+                    .expectBody<Car>()
+                    .isEqualTo(firstCar)
 
                 verify(mockCarService, times(1)).update(firstCar)
             }

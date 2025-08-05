@@ -38,9 +38,9 @@ class CarServiceTests {
                 ).thenReturn(null)
                 whenever(mockCarRepository.save(firstCarEntity.copy(id = null))).thenReturn(firstCarEntity)
 
-                val carId = carService.create(firstCar.copy(id = null))
+                val car = carService.create(firstCar.copy(id = null))
 
-                assertEquals(FIRST_CAR_ID, carId)
+                assertEquals(firstCar, car)
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals(
@@ -86,9 +86,11 @@ class CarServiceTests {
         fun `updates an existing car`() =
             runTest {
                 whenever(mockCarRepository.findById(SECOND_CAR_ID)).thenReturn(secondCarEntity)
+                whenever(mockCarRepository.save(secondCarEntity)).thenReturn(secondCarEntity)
 
-                carService.update(secondCar)
+                val updatedCar = carService.update(secondCar)
 
+                assertEquals(secondCar, updatedCar)
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals(
