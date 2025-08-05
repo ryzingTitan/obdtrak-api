@@ -17,7 +17,7 @@ class TrackService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(TrackService::class.java)
 
-    suspend fun create(track: Track): Int? {
+    suspend fun create(track: Track): Track {
         val existingTrack = trackRepository.findByName(track.name)
 
         if (existingTrack != null) {
@@ -26,7 +26,7 @@ class TrackService(
             throw TrackAlreadyExistsException(message)
         }
 
-        val trackId =
+        val trackEntity =
             trackRepository
                 .save(
                     TrackEntity(
@@ -34,14 +34,19 @@ class TrackService(
                         longitude = track.longitude,
                         latitude = track.latitude,
                     ),
-                ).id
+                )
 
         logger.info("Created track named ${track.name}")
 
-        return trackId
+        return Track(
+            id = trackEntity.id,
+            name = trackEntity.name,
+            latitude = trackEntity.latitude,
+            longitude = trackEntity.longitude,
+        )
     }
 
-    suspend fun update(track: Track) {
+    suspend fun update(track: Track): Track {
         val existingTrack = trackRepository.findById(track.id!!)
 
         if (existingTrack == null) {
@@ -50,16 +55,24 @@ class TrackService(
             throw TrackDoesNotExistException(message)
         }
 
-        trackRepository.save(
-            TrackEntity(
-                id = track.id,
-                name = track.name,
-                longitude = track.longitude,
-                latitude = track.latitude,
-            ),
-        )
+        val updatedTrackEntity =
+            trackRepository.save(
+                TrackEntity(
+                    id = track.id,
+                    name = track.name,
+                    longitude = track.longitude,
+                    latitude = track.latitude,
+                ),
+            )
 
         logger.info("Updated track named ${track.name}")
+
+        return Track(
+            id = updatedTrackEntity.id,
+            name = updatedTrackEntity.name,
+            latitude = updatedTrackEntity.latitude,
+            longitude = updatedTrackEntity.longitude,
+        )
     }
 
     fun getAll(): Flow<Track> {

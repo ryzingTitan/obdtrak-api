@@ -8,11 +8,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.awaitEntity
 import org.springframework.web.reactive.function.client.awaitEntityList
 import org.springframework.web.reactive.function.client.awaitExchange
 
@@ -91,10 +91,15 @@ class TrackControllerStepDefs {
         assertEquals(expectedTracks, returnedTracks)
     }
 
-    private fun handleTrackResponse(clientResponse: ClientResponse) {
+    private suspend fun handleTrackResponse(clientResponse: ClientResponse) {
         CommonControllerStepDefs.responseStatus = clientResponse.statusCode() as HttpStatus
-        CommonControllerStepDefs.locationHeader =
-            clientResponse.headers().header(HttpHeaders.LOCATION).firstOrNull() ?: ""
+        if (clientResponse.statusCode().is2xxSuccessful) {
+            val track = clientResponse.awaitEntity<Track>().body
+
+            if (track != null) {
+                returnedTracks.add(track)
+            }
+        }
     }
 
     @DataTableType

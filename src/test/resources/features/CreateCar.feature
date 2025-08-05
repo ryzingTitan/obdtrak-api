@@ -6,7 +6,9 @@ Feature: Create a new car
       | year | make       | model |
       | 2001 | Volkswagen | Jetta |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/cars/1'
+    And the following cars are returned:
+      | id | year | make       | model |
+      | 1  | 2001 | Volkswagen | Jetta |
     And the following cars will exist:
       | id | yearManufactured | make       | model |
       | 1  | 2001             | Volkswagen | Jetta |

@@ -9,6 +9,9 @@ Feature: Update an existing car
       | id | year | make       | model |
       | 1  | 2001 | Volkswagen | Golf  |
     Then the request response status is 'OK'
+    And the following cars are returned:
+      | id | year | make       | model |
+      | 1  | 2001 | Volkswagen | Golf  |
     And the following cars will exist:
       | id | yearManufactured | make       | model |
       | 1  | 2001             | Volkswagen | Golf  |
@@ -24,7 +27,7 @@ Feature: Update an existing car
     When the following car is updated:
       | id | year | make       | model |
       | 2  | 2001 | Volkswagen | Golf  |
-    Then the request response status is 'GONE'
+    Then the request response status is 'NOT_FOUND'
     And the following cars will exist:
       | id | yearManufactured | make       | model |
       | 1  | 2001             | Volkswagen | Jetta |

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 class CarService(
     private val carRepository: CarRepository,
 ) {
-    suspend fun create(car: Car): Int? {
+    suspend fun create(car: Car): Car {
         val existingCar = carRepository.findByYearManufacturedAndMakeAndModel(car.year, car.make, car.model)
 
         if (existingCar != null) {
@@ -24,7 +24,7 @@ class CarService(
             throw CarAlreadyExistsException(message)
         }
 
-        val carId =
+        val carEntity =
             carRepository
                 .save(
                     CarEntity(
@@ -32,14 +32,19 @@ class CarService(
                         make = car.make,
                         model = car.model,
                     ),
-                ).id
+                )
 
         logger.info("Created car ${car.year} ${car.make} ${car.model}")
 
-        return carId
+        return Car(
+            id = carEntity.id,
+            year = carEntity.yearManufactured,
+            make = carEntity.make,
+            model = carEntity.model,
+        )
     }
 
-    suspend fun update(car: Car) {
+    suspend fun update(car: Car): Car {
         val existingCar = carRepository.findById(car.id!!)
 
         if (existingCar == null) {
@@ -48,16 +53,24 @@ class CarService(
             throw CarDoesNotExistException(message)
         }
 
-        carRepository.save(
-            CarEntity(
-                id = car.id,
-                yearManufactured = car.year,
-                make = car.make,
-                model = car.model,
-            ),
-        )
+        val updatedCarEntity =
+            carRepository.save(
+                CarEntity(
+                    id = car.id,
+                    yearManufactured = car.year,
+                    make = car.make,
+                    model = car.model,
+                ),
+            )
 
         logger.info("Updated car ${car.year} ${car.make} ${car.model}")
+
+        return Car(
+            id = updatedCarEntity.id,
+            year = updatedCarEntity.yearManufactured,
+            make = updatedCarEntity.make,
+            model = updatedCarEntity.model,
+        )
     }
 
     fun getAll(): Flow<Car> {

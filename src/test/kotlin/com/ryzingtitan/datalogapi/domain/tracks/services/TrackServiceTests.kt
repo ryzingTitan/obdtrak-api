@@ -35,9 +35,9 @@ class TrackServiceTests {
                 whenever(mockTrackRepository.findByName(FIRST_TRACK_NAME)).thenReturn(null)
                 whenever(mockTrackRepository.save(firstTrackEntity.copy(id = null))).thenReturn(firstTrackEntity)
 
-                val trackId = trackService.create(firstTrack.copy(id = null))
+                val track = trackService.create(firstTrack.copy(id = null))
 
-                assertEquals(FIRST_TRACK_ID, trackId)
+                assertEquals(firstTrack, track)
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Created track named $FIRST_TRACK_NAME", appender.list[0].message)
@@ -72,9 +72,11 @@ class TrackServiceTests {
         fun `updates an existing track`() =
             runTest {
                 whenever(mockTrackRepository.findById(SECOND_TRACK_ID)).thenReturn(secondTrackEntity)
+                whenever(mockTrackRepository.save(secondTrackEntity)).thenReturn(secondTrackEntity)
 
-                trackService.update(secondTrack)
+                val updatedTrack = trackService.update(secondTrack)
 
+                assertEquals(secondTrack, updatedTrack)
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Updated track named $SECOND_TRACK_NAME", appender.list[0].message)

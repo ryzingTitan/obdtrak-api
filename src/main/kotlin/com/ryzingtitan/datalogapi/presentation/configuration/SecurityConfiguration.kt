@@ -43,6 +43,12 @@ class SecurityConfiguration {
                     .authenticated()
                     .pathMatchers(HttpMethod.GET, "/actuator/health")
                     .permitAll()
+                    .pathMatchers(HttpMethod.GET, "/swagger-ui/**")
+                    .permitAll()
+                    .pathMatchers(HttpMethod.GET, "/v3/api-docs/**")
+                    .permitAll()
+                    .pathMatchers(HttpMethod.GET, "/v3/api-docs.yaml")
+                    .permitAll()
                     .pathMatchers("/**")
                     .denyAll()
             }.httpBasic { it.disable() }

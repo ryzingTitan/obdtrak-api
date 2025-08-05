@@ -122,7 +122,7 @@ Feature: Update an existing session from an uploaded file
     When the file is uploaded for a session with the following data and session id 2:
       | trackId | carId | userFirstName | userLastName | userEmail     |
       | 1       | 1     | test          | tester       | test@test.com |
-    Then the request response status is 'GONE'
+    Then the request response status is 'NOT_FOUND'
     And the following sessions will exist:
       | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
       | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |

@@ -9,6 +9,9 @@ Feature: Update an existing track
       | id | name         | longitude | latitude |
       | 1  | Test Track 1 | -89.1374  | 45.4086  |
     Then the request response status is 'OK'
+    And the following tracks are returned:
+      | id | name         | longitude | latitude |
+      | 1  | Test Track 1 | -89.1374  | 45.4086  |
     And the following tracks will exist:
       | id | name         | longitude | latitude |
       | 1  | Test Track 1 | -89.1374  | 45.4086  |
@@ -24,7 +27,7 @@ Feature: Update an existing track
     When the following track is updated:
       | id | name         | longitude | latitude |
       | 2  | Test Track 1 | -89.1374  | 45.4086  |
-    Then the request response status is 'GONE'
+    Then the request response status is 'NOT_FOUND'
     And the following tracks will exist:
       | id | name         | longitude | latitude |
       | 1  | Test Track 2 | -86.1374  | 42.4086  |

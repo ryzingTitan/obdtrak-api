@@ -6,7 +6,9 @@ Feature: Create a new track
       | name         | longitude | latitude |
       | Test Track 1 | -86.1374  | 42.4086  |
     Then the request response status is 'CREATED'
-    And the location header will end with '/api/tracks/1'
+    And the following tracks are returned:
+      | id | name         | longitude | latitude |
+      | 1  | Test Track 1 | -86.1374  | 42.4086  |
     And the following tracks will exist:
       | id | name         | longitude | latitude |
       | 1  | Test Track 1 | -86.1374  | 42.4086  |
