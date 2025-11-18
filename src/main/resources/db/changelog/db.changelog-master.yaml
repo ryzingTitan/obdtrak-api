@@ -1,4 +1,13 @@
 databaseChangeLog:
+  - property:
+      name: uuid_function
+      value: gen_random_uuid()
+      dbms: postgresql
+  - property:
+      name: uuid_function
+      value: random_uuid()
+      dbms: h2
+
   - changeSet:
       id: Create tracks table
       author: kstoltzfus
@@ -8,8 +17,9 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  autoIncrement: false
+                  defaultValueComputed: ${uuid_function}
                   constraints:
                     primaryKey: true
               - column:
@@ -97,7 +107,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: track_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: fk_session_track_id

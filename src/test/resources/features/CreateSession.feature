@@ -2,8 +2,8 @@ Feature: Create a new session from an uploaded file
 
   Background:
     Given the following tracks exist:
-      | name       | longitude | latitude |
-      | Test Track | -90.1374  | 45.4086  |
+      | id                                   | name       | longitude | latitude |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | Test Track | -90.1374  | 45.4086  |
     And the following cars exist:
       | yearManufactured | make       | model |
       | 2001             | Volkswagen | Jetta |
@@ -14,12 +14,12 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004 | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:47.968Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:47.968Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
@@ -36,12 +36,12 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              | 14.7                         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
@@ -59,12 +59,12 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              |              |
@@ -83,12 +83,12 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:49.965 | -86.14162          | 42.406800000000004  | 186.8    | -                              | 2500            | 130                        | 79               | -                              | 15.0                            | 14.8                         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
@@ -108,12 +108,12 @@ Feature: Create a new session from an uploaded file
       | Device Time              | abc                | def                 | ghi      | jkl                            | mno             | qpr                        | st               | uv                             | wx                              | yz                           |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
@@ -131,20 +131,20 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004  | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              | 14.9                         |
     And the following sessions exist:
-      | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |
+      | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs exist:
       | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | 1       | 1     |
-      | 2  | test@test.com  | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | id | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
+      | 2  | test@test.com  | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
@@ -162,19 +162,19 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004  | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              | 14.9                         |
     And the following sessions exist:
-      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs exist:
       | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1         | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'CONFLICT'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | 1       | 1     |
+      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
     And the following datalogs will exist:
       | id | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
       | 1  | 1         | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
@@ -190,8 +190,8 @@ Feature: Create a new session from an uploaded file
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004 | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
     And the user has an invalid authorization token
     When the file is uploaded for a session with the following data:
-      | trackId | carId | userFirstName | userLastName | userEmail     |
-      | 1       | 1     | test          | tester       | test@test.com |
+      | trackId                              | carId | userFirstName | userLastName | userEmail     |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     | test          | tester       | test@test.com |
     Then the request response status is 'UNAUTHORIZED'
     And the following sessions will exist:
       | id | userEmail | userFirstName | userLastName | startTime | endTime | trackId | carId |
