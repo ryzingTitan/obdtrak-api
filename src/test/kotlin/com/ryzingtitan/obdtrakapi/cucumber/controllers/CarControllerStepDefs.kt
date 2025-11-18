@@ -2,19 +2,19 @@ package com.ryzingtitan.obdtrakapi.cucumber.controllers
 
 import com.ryzingtitan.obdtrakapi.cucumber.common.CommonControllerStepDefs
 import com.ryzingtitan.obdtrakapi.domain.cars.dtos.Car
-import io.cucumber.datatable.DataTable
+import com.ryzingtitan.obdtrakapi.domain.cars.dtos.CarRequest
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.awaitEntity
 import org.springframework.web.reactive.function.client.awaitEntityList
 import org.springframework.web.reactive.function.client.awaitExchange
+import java.util.UUID
+import kotlin.test.assertEquals
 
 class CarControllerStepDefs {
     @When("all cars are retrieved")
@@ -34,14 +34,12 @@ class CarControllerStepDefs {
     }
 
     @When("the following car is created:")
-    fun whenTheFollowingCarIsCreated(table: DataTable) {
-        val car = table.asList(Car::class.java).first()
-
+    fun whenTheFollowingCarIsCreated(carRequests: List<CarRequest>) {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .post()
                 .uri("/cars")
-                .body(BodyInserters.fromValue(car))
+                .bodyValue(carRequests.first())
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
@@ -51,15 +49,16 @@ class CarControllerStepDefs {
         }
     }
 
-    @When("the following car is updated:")
-    fun whenTheFollowingCarIsUpdated(table: DataTable) {
-        val car = table.asList(Car::class.java).first()
-
+    @When("the following car id {string} is updated:")
+    fun whenTheFollowingCarIsUpdated(
+        carId: String,
+        carRequests: List<CarRequest>,
+    ) {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .put()
-                .uri("/cars/${car.id}")
-                .body(BodyInserters.fromValue(car))
+                .uri("/cars/${UUID.fromString(carId)}")
+                .bodyValue(carRequests.first())
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
@@ -69,12 +68,12 @@ class CarControllerStepDefs {
         }
     }
 
-    @When("the car with id {int} is deleted")
-    fun whenTheCarWithIdIsDeleted(carId: Int) {
+    @When("the car with id {string} is deleted")
+    fun whenTheCarWithIdIsDeleted(carId: String) {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .delete()
-                .uri("/cars/$carId")
+                .uri("/cars/${UUID.fromString(carId)}")
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
@@ -85,10 +84,14 @@ class CarControllerStepDefs {
     }
 
     @Then("the following cars are returned:")
-    fun thenTheFollowingCarsAreReturned(table: DataTable) {
-        val expectedCars = table.asList(Car::class.java)
+    fun thenTheFollowingCarsAreReturned(expectedCars: List<Car>) {
+        assertEquals(expectedCars.size, returnedCars.size)
 
-        assertEquals(expectedCars, returnedCars)
+        expectedCars.forEachIndexed { index, expectedCar ->
+            assertEquals(expectedCar.year, returnedCars[index].year)
+            assertEquals(expectedCar.make, returnedCars[index].make)
+            assertEquals(expectedCar.model, returnedCars[index].model)
+        }
     }
 
     private suspend fun handleCarResponse(clientResponse: ClientResponse) {
@@ -103,9 +106,17 @@ class CarControllerStepDefs {
     }
 
     @DataTableType
+    fun mapCarRequest(tableRow: Map<String, String>): CarRequest =
+        CarRequest(
+            year = tableRow["year"]!!.toInt(),
+            make = tableRow["make"].orEmpty(),
+            model = tableRow["model"].orEmpty(),
+        )
+
+    @DataTableType
     fun mapCar(tableRow: Map<String, String>): Car =
         Car(
-            id = tableRow["id"]?.toIntOrNull(),
+            id = UUID.randomUUID(),
             year = tableRow["year"]!!.toInt(),
             make = tableRow["make"].orEmpty(),
             model = tableRow["model"].orEmpty(),

@@ -8,6 +8,7 @@ import ch.qos.logback.core.read.ListAppender
 import com.ryzingtitan.obdtrakapi.data.cars.entities.CarEntity
 import com.ryzingtitan.obdtrakapi.data.cars.repositories.CarRepository
 import com.ryzingtitan.obdtrakapi.domain.cars.dtos.Car
+import com.ryzingtitan.obdtrakapi.domain.cars.dtos.CarRequest
 import com.ryzingtitan.obdtrakapi.domain.cars.exceptions.CarAlreadyExistsException
 import com.ryzingtitan.obdtrakapi.domain.cars.exceptions.CarDoesNotExistException
 import kotlinx.coroutines.flow.flowOf
@@ -25,6 +26,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.slf4j.LoggerFactory
+import java.util.UUID
 
 class CarServiceTests {
     @Nested
@@ -38,7 +40,7 @@ class CarServiceTests {
                 ).thenReturn(null)
                 whenever(mockCarRepository.save(firstCarEntity.copy(id = null))).thenReturn(firstCarEntity)
 
-                val car = carService.create(firstCar.copy(id = null))
+                val car = carService.create(firstCarRequest)
 
                 assertEquals(firstCar, car)
                 assertEquals(1, appender.list.size)
@@ -63,7 +65,7 @@ class CarServiceTests {
 
                 val exception =
                     assertThrows<CarAlreadyExistsException> {
-                        carService.create(firstCar.copy(id = null))
+                        carService.create(firstCarRequest)
                     }
 
                 assertEquals("$FIRST_CAR_YEAR $FIRST_CAR_MAKE $FIRST_CAR_MODEL already exists", exception.message)
@@ -85,10 +87,10 @@ class CarServiceTests {
         @Test
         fun `updates an existing car`() =
             runTest {
-                whenever(mockCarRepository.findById(SECOND_CAR_ID)).thenReturn(secondCarEntity)
+                whenever(mockCarRepository.findById(secondCarId)).thenReturn(secondCarEntity)
                 whenever(mockCarRepository.save(secondCarEntity)).thenReturn(secondCarEntity)
 
-                val updatedCar = carService.update(secondCar)
+                val updatedCar = carService.update(secondCarId, secondCarRequest)
 
                 assertEquals(secondCar, updatedCar)
                 assertEquals(1, appender.list.size)
@@ -98,18 +100,18 @@ class CarServiceTests {
                     appender.list[0].message,
                 )
 
-                verify(mockCarRepository, times(1)).findById(SECOND_CAR_ID)
+                verify(mockCarRepository, times(1)).findById(secondCarId)
                 verify(mockCarRepository, times(1)).save(secondCarEntity)
             }
 
         @Test
         fun `does not update a car that does not exist`() =
             runTest {
-                whenever(mockCarRepository.findById(SECOND_CAR_ID)).thenReturn(null)
+                whenever(mockCarRepository.findById(secondCarId)).thenReturn(null)
 
                 val exception =
                     assertThrows<CarDoesNotExistException> {
-                        carService.update(secondCar)
+                        carService.update(secondCarId, secondCarRequest)
                     }
 
                 assertEquals("$SECOND_CAR_YEAR $SECOND_CAR_MAKE $SECOND_CAR_MODEL does not exist", exception.message)
@@ -120,7 +122,7 @@ class CarServiceTests {
                     appender.list[0].message,
                 )
 
-                verify(mockCarRepository, times(1)).findById(SECOND_CAR_ID)
+                verify(mockCarRepository, times(1)).findById(secondCarId)
                 verify(mockCarRepository, never()).save(any())
             }
     }
@@ -146,13 +148,13 @@ class CarServiceTests {
         @Test
         fun `deletes car when car exists`() =
             runTest {
-                carService.delete(FIRST_CAR_ID)
+                carService.delete(firstCarId)
 
-                verify(mockCarRepository, times(1)).deleteById(FIRST_CAR_ID)
+                verify(mockCarRepository, times(1)).deleteById(firstCarId)
 
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
-                assertEquals("Deleted car with id $FIRST_CAR_ID", appender.list[0].message)
+                assertEquals("Deleted car with id $firstCarId", appender.list[0].message)
             }
     }
 
@@ -173,17 +175,27 @@ class CarServiceTests {
 
     private val mockCarRepository = mock<CarRepository>()
 
+    private val firstCarId = UUID.randomUUID()
+    private val secondCarId = UUID.randomUUID()
+
     private val firstCarEntity =
         CarEntity(
-            id = FIRST_CAR_ID,
+            id = firstCarId,
             yearManufactured = FIRST_CAR_YEAR,
+            make = FIRST_CAR_MAKE,
+            model = FIRST_CAR_MODEL,
+        )
+
+    private val firstCarRequest =
+        CarRequest(
+            year = FIRST_CAR_YEAR,
             make = FIRST_CAR_MAKE,
             model = FIRST_CAR_MODEL,
         )
 
     private val firstCar =
         Car(
-            id = FIRST_CAR_ID,
+            id = firstCarId,
             year = FIRST_CAR_YEAR,
             make = FIRST_CAR_MAKE,
             model = FIRST_CAR_MODEL,
@@ -191,27 +203,32 @@ class CarServiceTests {
 
     private val secondCarEntity =
         CarEntity(
-            id = SECOND_CAR_ID,
+            id = secondCarId,
             yearManufactured = SECOND_CAR_YEAR,
+            make = SECOND_CAR_MAKE,
+            model = SECOND_CAR_MODEL,
+        )
+
+    private val secondCarRequest =
+        CarRequest(
+            year = SECOND_CAR_YEAR,
             make = SECOND_CAR_MAKE,
             model = SECOND_CAR_MODEL,
         )
 
     private val secondCar =
         Car(
-            id = SECOND_CAR_ID,
+            id = secondCarId,
             year = SECOND_CAR_YEAR,
             make = SECOND_CAR_MAKE,
             model = SECOND_CAR_MODEL,
         )
 
     companion object CarServiceTestConstants {
-        const val FIRST_CAR_ID = 1
         const val FIRST_CAR_YEAR = 2001
         const val FIRST_CAR_MAKE = "Volkswagen"
         const val FIRST_CAR_MODEL = "Jetta"
 
-        const val SECOND_CAR_ID = 2
         const val SECOND_CAR_YEAR = 1999
         const val SECOND_CAR_MAKE = "Chevrolet"
         const val SECOND_CAR_MODEL = "Corvette"

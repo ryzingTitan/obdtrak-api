@@ -5,11 +5,11 @@ Feature: Retrieve datalogs by session id
       | id                                   | name       | longitude | latitude |
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | Test Track | -90.1374  | 45.4086  |
     And the following cars exist:
-      | yearManufactured | make       | model |
-      | 2001             | Volkswagen | Jetta |
+      | id                                   | yearManufactured | make       | model |
+      | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | 2001             | Volkswagen | Jetta |
     And the following sessions exist:
-      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
-      | test@test.com | Test          | Tester       | 2022-09-18T18:14:47.968Z | 2022-09-18T18:17:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | Test          | Tester       | 2022-09-18T18:14:47.968Z | 2022-09-18T18:17:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
 
   Scenario: Retrieve datalogs for a session with a single datalog
     Given the following datalogs exist:

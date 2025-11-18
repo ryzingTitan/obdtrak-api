@@ -46,7 +46,7 @@ class SessionServiceTests {
                 whenever(mockSessionRepository.findAllByUserEmail(USER_EMAIL))
                     .thenReturn(flowOf(firstSessionEntity, secondSessionEntity))
                 whenever(mockTrackRepository.findById(trackId)).thenReturn(trackEntity)
-                whenever(mockCarRepository.findById(CAR_ID)).thenReturn(carEntity)
+                whenever(mockCarRepository.findById(carId)).thenReturn(carEntity)
 
                 val sessions = sessionService.getAllByUser(USER_EMAIL)
 
@@ -129,6 +129,7 @@ class SessionServiceTests {
             runTest {
                 val currentSessionId = 1
                 val trackId = UUID.randomUUID()
+                val carId = UUID.randomUUID()
 
                 whenever(mockSessionRepository.findById(currentSessionId))
                     .thenReturn(firstSessionEntity)
@@ -142,7 +143,7 @@ class SessionServiceTests {
                 sessionService.update(
                     FileUpload(
                         flowOf(dataBuffer),
-                        fileUploadMetadata.copy(sessionId = currentSessionId, trackId = trackId, carId = 2),
+                        fileUploadMetadata.copy(sessionId = currentSessionId, trackId = trackId, carId = carId),
                     ),
                 )
 
@@ -155,7 +156,7 @@ class SessionServiceTests {
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
                 verify(mockDatalogRepository, times(1))
                     .saveAll(listOf(datalog.copy(sessionId = currentSessionId)))
-                verify(mockSessionRepository, times(1)).save(firstSessionEntity.copy(trackId = trackId, carId = 2))
+                verify(mockSessionRepository, times(1)).save(firstSessionEntity.copy(trackId = trackId, carId = carId))
             }
 
         @Test
@@ -221,6 +222,7 @@ class SessionServiceTests {
     private val dataBufferFactory = DefaultDataBufferFactory()
     private val dataBuffer = dataBufferFactory.wrap("header row 1\ndata row 1\n".toByteArray())
     private val trackId = UUID.randomUUID()
+    private val carId = UUID.randomUUID()
 
     private val firstSessionEntity =
         SessionEntity(
@@ -231,7 +233,7 @@ class SessionServiceTests {
             startTime = timestamp,
             endTime = timestamp,
             trackId = trackId,
-            carId = CAR_ID,
+            carId = carId,
         )
 
     private val secondSessionEntity =
@@ -243,7 +245,7 @@ class SessionServiceTests {
             startTime = timestamp,
             endTime = timestamp,
             trackId = trackId,
-            carId = CAR_ID,
+            carId = carId,
         )
 
     private val trackEntity =
@@ -256,7 +258,7 @@ class SessionServiceTests {
 
     private val carEntity =
         CarEntity(
-            id = CAR_ID,
+            id = carId,
             yearManufactured = CAR_YEAR,
             make = CAR_MAKE,
             model = CAR_MODEL,
@@ -293,7 +295,7 @@ class SessionServiceTests {
             fileName = "testFile.txt",
             sessionId = null,
             trackId = trackId,
-            carId = CAR_ID,
+            carId = carId,
             userEmail = USER_EMAIL,
             userFirstName = USER_FIRST_NAME,
             userLastName = USER_LAST_NAME,
@@ -319,7 +321,6 @@ class SessionServiceTests {
         const val USER_EMAIL = "test@test.com"
         const val USER_FIRST_NAME = "test"
         const val USER_LAST_NAME = "tester"
-        const val CAR_ID = 1
         const val TRACK_NAME = "Test Track"
         const val TRACK_LATITUDE = 12.0
         const val TRACK_LONGITUDE = 14.0

@@ -2,44 +2,45 @@ package com.ryzingtitan.obdtrakapi.cucumber.repositories
 
 import com.ryzingtitan.obdtrakapi.data.cars.entities.CarEntity
 import com.ryzingtitan.obdtrakapi.data.cars.repositories.CarRepository
-import io.cucumber.datatable.DataTable
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
+import java.util.UUID
+import kotlin.test.assertEquals
 
 class CarRepositoryStepDefs(
     private val carRepository: CarRepository,
+    private val r2dbcEntityTemplate: R2dbcEntityTemplate,
 ) {
     @Given("the following cars exist:")
-    fun givenTheFollowingCarsExist(table: DataTable) {
-        val cars = table.asList(CarEntity::class.java)
-
-        runBlocking {
-            carRepository.saveAll(cars).collect()
+    fun givenTheFollowingCarsExist(existingCars: List<CarEntity>) {
+        existingCars.forEach { carEntity ->
+            r2dbcEntityTemplate.insert(carEntity).block()
         }
     }
 
     @Then("the following cars will exist:")
-    fun thenTheFollowingCarsWillExist(table: DataTable) {
-        val expectedCars = table.asList(CarEntity::class.java)
-
-        val actualCars = mutableListOf<CarEntity>()
+    fun thenTheFollowingCarsWillExist(expectedCars: List<CarEntity>) {
         runBlocking {
-            carRepository.findAll().collect { car ->
-                actualCars.add(car)
+            val actualCars = carRepository.findAll().toList()
+
+            assertEquals(expectedCars.size, actualCars.size)
+
+            expectedCars.forEachIndexed { index, expectedCar ->
+                assertEquals(expectedCar.yearManufactured, actualCars[index].yearManufactured)
+                assertEquals(expectedCar.make, actualCars[index].make)
+                assertEquals(expectedCar.model, actualCars[index].model)
             }
         }
-
-        assertEquals(expectedCars, actualCars)
     }
 
     @DataTableType
     fun mapCarEntity(tableRow: Map<String, String>): CarEntity =
         CarEntity(
-            id = tableRow["id"]?.toIntOrNull(),
+            id = if (tableRow["id"].isNullOrEmpty()) null else UUID.fromString(tableRow["id"]),
             yearManufactured = tableRow["yearManufactured"]!!.toInt(),
             make = tableRow["make"].orEmpty(),
             model = tableRow["model"].orEmpty(),

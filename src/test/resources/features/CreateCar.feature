@@ -1,4 +1,4 @@
-Feature: Create a new car
+Feature: Create car
 
   Scenario: Create a new car
     Given the user has a valid authorization token
@@ -7,11 +7,11 @@ Feature: Create a new car
       | 2001 | Volkswagen | Jetta |
     Then the request response status is 'CREATED'
     And the following cars are returned:
-      | id | year | make       | model |
-      | 1  | 2001 | Volkswagen | Jetta |
+      | year | make       | model |
+      | 2001 | Volkswagen | Jetta |
     And the following cars will exist:
-      | id | yearManufactured | make       | model |
-      | 1  | 2001             | Volkswagen | Jetta |
+      | yearManufactured | make       | model |
+      | 2001             | Volkswagen | Jetta |
     And the application will log the following messages:
       | level | message                           |
       | INFO  | Created car 2001 Volkswagen Jetta |
@@ -26,8 +26,8 @@ Feature: Create a new car
       | 2001 | Volkswagen | Jetta |
     Then the request response status is 'CONFLICT'
     And the following cars will exist:
-      | id | yearManufactured | make       | model |
-      | 1  | 2001             | Volkswagen | Jetta |
+      | yearManufactured | make       | model |
+      | 2001             | Volkswagen | Jetta |
     And the application will log the following messages:
       | level | message                              |
       | ERROR | 2001 Volkswagen Jetta already exists |

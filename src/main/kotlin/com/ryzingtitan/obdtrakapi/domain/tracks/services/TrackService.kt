@@ -50,12 +50,12 @@ class TrackService(
 
     suspend fun update(
         trackId: UUID,
-        track: TrackRequest,
+        trackRequest: TrackRequest,
     ): Track {
         val existingTrack = trackRepository.findById(trackId)
 
         if (existingTrack == null) {
-            val message = "A track named ${track.name} does not exist"
+            val message = "A track named ${trackRequest.name} does not exist"
             logger.error(message)
             throw TrackDoesNotExistException(message)
         }
@@ -64,13 +64,13 @@ class TrackService(
             trackRepository.save(
                 TrackEntity(
                     id = trackId,
-                    name = track.name,
-                    longitude = track.longitude,
-                    latitude = track.latitude,
+                    name = trackRequest.name,
+                    longitude = trackRequest.longitude,
+                    latitude = trackRequest.latitude,
                 ),
             )
 
-        logger.info("Updated track named ${track.name}")
+        logger.info("Updated track named ${trackRequest.name}")
 
         return Track(
             id = updatedTrackEntity.id!!,

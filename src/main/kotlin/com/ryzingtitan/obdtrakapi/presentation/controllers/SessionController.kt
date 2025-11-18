@@ -112,7 +112,7 @@ class SessionController(
                         FileUploadMetadata(
                             fileName = uploadFile.filename(),
                             sessionId = null,
-                            carId = carId.toInt(),
+                            carId = UUID.fromString(carId),
                             trackId = UUID.fromString(trackId),
                             userEmail = userEmail,
                             userFirstName = userFirstName,
@@ -173,7 +173,7 @@ class SessionController(
                         fileName = uploadFile.filename(),
                         sessionId = sessionId,
                         trackId = UUID.fromString(trackId),
-                        carId = carId.toInt(),
+                        carId = UUID.fromString(carId),
                         userEmail = userEmail,
                         userFirstName = userFirstName,
                         userLastName = userLastName,

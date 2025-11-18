@@ -1,6 +1,7 @@
 package com.ryzingtitan.obdtrakapi.presentation.controllers
 
 import com.ryzingtitan.obdtrakapi.domain.cars.dtos.Car
+import com.ryzingtitan.obdtrakapi.domain.cars.dtos.CarRequest
 import com.ryzingtitan.obdtrakapi.domain.cars.services.CarService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping(path = ["/api/cars"])
@@ -83,8 +85,8 @@ class CarController(
         ],
     )
     suspend fun createCar(
-        @RequestBody car: Car,
-    ): Car = careService.create(car)
+        @RequestBody carRequest: CarRequest,
+    ): Car = careService.create(carRequest)
 
     @PutMapping("/{carId}")
     @Tag(name = "Car Administration")
@@ -119,9 +121,9 @@ class CarController(
         ],
     )
     suspend fun updateCar(
-        @PathVariable(name = "carId") carId: Int,
-        @RequestBody car: Car,
-    ): Car = careService.update(car.copy(id = carId))
+        @PathVariable(name = "carId") carId: UUID,
+        @RequestBody carRequest: CarRequest,
+    ): Car = careService.update(carId, carRequest)
 
     @DeleteMapping("/{carId}")
     @Tag(name = "Car Administration")
@@ -151,7 +153,7 @@ class CarController(
         ],
     )
     suspend fun deleteCar(
-        @PathVariable(name = "carId") carId: Int,
+        @PathVariable(name = "carId") carId: UUID,
     ) {
         careService.delete(carId)
     }

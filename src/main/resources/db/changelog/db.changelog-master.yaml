@@ -47,8 +47,9 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  autoIncrement: false
+                  defaultValueComputed: ${uuid_function}
                   constraints:
                     primaryKey: true
               - column:
@@ -115,7 +116,7 @@ databaseChangeLog:
                     referencedColumnNames: id
               - column:
                   name: car_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: fk_session_car_id

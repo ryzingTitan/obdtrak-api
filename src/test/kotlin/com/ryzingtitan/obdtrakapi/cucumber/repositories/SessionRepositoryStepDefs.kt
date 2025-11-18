@@ -48,6 +48,6 @@ class SessionRepositoryStepDefs(
             startTime = Instant.parse(tableRow["startTime"].orEmpty()),
             endTime = Instant.parse(tableRow["endTime"].orEmpty()),
             trackId = UUID.fromString(tableRow["trackId"]),
-            carId = tableRow["carId"]!!.toInt(),
+            carId = UUID.fromString(tableRow["carId"]),
         )
 }

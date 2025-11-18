@@ -134,13 +134,14 @@ class FileParsingServiceTests {
     private val firstLineTimestamp = Instant.parse("2022-09-18T18:15:47.963Z")
     private val secondLineTimestamp = Instant.parse("2022-09-18T18:18:47.968Z")
     private val trackId = UUID.randomUUID()
+    private val carId = UUID.randomUUID()
 
     private val fileUploadMetadata =
         FileUploadMetadata(
             fileName = "testFile.txt",
             sessionId = SESSION_ID,
             trackId = trackId,
-            carId = CAR_ID,
+            carId = carId,
             userEmail = USER_EMAIL,
             userFirstName = USER_FIRST_NAME,
             userLastName = USER_LAST_NAME,
@@ -207,7 +208,6 @@ class FileParsingServiceTests {
         const val USER_FIRST_NAME = "test"
         const val USER_LAST_NAME = "tester"
         const val SESSION_ID = 1
-        const val CAR_ID = 5
 
         const val FIRST_LINE_DEVICE_TIME = "18-Sep-2022 14:15:47.963"
         const val FIRST_LINE_LONGITUDE = -86.14162999999999
