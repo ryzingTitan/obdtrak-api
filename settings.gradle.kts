@@ -1,1 +1,1 @@
-rootProject.name = "datalog-api"
+rootProject.name = "obdtrak-api"

@@ -41,3 +41,5 @@ testFiles/*
 .kotlin
 
 src/main/resources/application-local.yml
+
+obdtrak-api
