@@ -22,6 +22,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBodyList
 import java.time.Instant
+import java.util.UUID
 
 class DatalogControllerTests {
     @Nested
@@ -29,12 +30,12 @@ class DatalogControllerTests {
         @Test
         fun `returns 'OK' status with session data that matches the request parameter`() =
             runTest {
-                whenever(mockDatalogService.getAllBySessionId(SESSION_ID))
+                whenever(mockDatalogService.getAllBySessionId(sessionId))
                     .thenReturn(flowOf(firstDatalog, secondDatalog))
 
                 webTestClient
                     .get()
-                    .uri("/api/sessions/$SESSION_ID/datalogs")
+                    .uri("/api/sessions/$sessionId/datalogs")
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
@@ -44,9 +45,9 @@ class DatalogControllerTests {
 
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
-                assertEquals("Retrieving datalogs for session id: $SESSION_ID", appender.list[0].message)
+                assertEquals("Retrieving datalogs for session id: $sessionId", appender.list[0].message)
 
-                verify(mockDatalogService, times(1)).getAllBySessionId(SESSION_ID)
+                verify(mockDatalogService, times(1)).getAllBySessionId(sessionId)
             }
     }
 
@@ -68,9 +69,11 @@ class DatalogControllerTests {
 
     private val mockDatalogService = mock<DatalogService>()
 
+    private val sessionId = UUID.randomUUID()
+
     private val firstDatalog =
         Datalog(
-            sessionId = SESSION_ID,
+            sessionId = sessionId,
             timestamp = Instant.now(),
             longitude = -86.14162,
             latitude = 42.406800000000004,
@@ -86,7 +89,7 @@ class DatalogControllerTests {
 
     private val secondDatalog =
         Datalog(
-            sessionId = SESSION_ID,
+            sessionId = sessionId,
             timestamp = Instant.now(),
             longitude = 86.14162,
             latitude = -42.406800000000004,
@@ -99,8 +102,4 @@ class DatalogControllerTests {
             throttlePosition = 75.0f,
             airFuelRatio = 15.9f,
         )
-
-    companion object DatalogControllerTestConstants {
-        private const val SESSION_ID = 5
-    }
 }

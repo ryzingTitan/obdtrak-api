@@ -48,7 +48,7 @@ class FileParsingServiceTests {
                     fileParsingService.parse(
                         FileUpload(
                             flowOf(dataBuffer),
-                            fileUploadMetadata.copy(sessionId = null),
+                            fileUploadMetadata,
                         ),
                     )
 
@@ -108,7 +108,8 @@ class FileParsingServiceTests {
                 assertEquals(
                     "Unable to parse row: Sat Oct 21 16:22:38 EDT 2023," +
                         "Device Time,-86.14162999999999,42.406800000000004,10.260987281799316,1.7999999523162842," +
-                        "188.4,340.0299987792969,7.44,0.16,1.97,-0.2,14.7,155,5500,123,86,95.5,16.5",
+                        "188.4,340.0299987792969,7.44,0.16,1.97,-0.2,14.7,155,5500,123,86,95.5,16.5 " +
+                        "with error: Text 'Device Time' could not be parsed at index 0",
                     appender.list[1].message,
                 )
                 assertEquals(Level.INFO, appender.list[2].level)
@@ -139,7 +140,6 @@ class FileParsingServiceTests {
     private val fileUploadMetadata =
         FileUploadMetadata(
             fileName = "testFile.txt",
-            sessionId = SESSION_ID,
             trackId = trackId,
             carId = carId,
             userEmail = USER_EMAIL,
@@ -173,7 +173,6 @@ class FileParsingServiceTests {
 
     private val firstDatalog =
         DatalogEntity(
-            sessionId = SESSION_ID,
             timestamp = firstLineTimestamp,
             longitude = FIRST_LINE_LONGITUDE,
             latitude = FIRST_LINE_LATITUDE,
@@ -189,7 +188,6 @@ class FileParsingServiceTests {
 
     private val secondDatalog =
         DatalogEntity(
-            sessionId = SESSION_ID,
             timestamp = secondLineTimestamp,
             longitude = SECOND_LINE_LONGITUDE,
             latitude = SECOND_LINE_LATITUDE,
@@ -207,7 +205,6 @@ class FileParsingServiceTests {
         const val USER_EMAIL = "test@test.com"
         const val USER_FIRST_NAME = "test"
         const val USER_LAST_NAME = "tester"
-        const val SESSION_ID = 1
 
         const val FIRST_LINE_DEVICE_TIME = "18-Sep-2022 14:15:47.963"
         const val FIRST_LINE_LONGITUDE = -86.14162999999999

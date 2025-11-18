@@ -11,7 +11,6 @@ import com.ryzingtitan.obdtrakapi.domain.sessions.services.SessionService
 import com.ryzingtitan.obdtrakapi.domain.tracks.services.TrackService
 import com.ryzingtitan.obdtrakapi.presentation.controllers.DatalogController
 import com.ryzingtitan.obdtrakapi.presentation.controllers.SessionController
-import io.cucumber.datatable.DataTable
 import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.DataTableType
@@ -21,9 +20,7 @@ import org.slf4j.LoggerFactory
 
 class LoggingStepDefs {
     @Then("the application will log the following messages:")
-    fun theApplicationWilLogTheFollowingMessages(table: DataTable) {
-        val expectedLogMessages = table.asList(LogMessage::class.java)
-
+    fun theApplicationWilLogTheFollowingMessages(expectedLogMessages: List<LogMessage>) {
         val actualLogMessages = ArrayList<LogMessage>()
 
         appender.list.forEach {

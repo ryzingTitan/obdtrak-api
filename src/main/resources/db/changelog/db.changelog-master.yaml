@@ -77,8 +77,9 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  autoIncrement: false
+                  defaultValueComputed: ${uuid_function}
                   constraints:
                     primaryKey: true
               - column:
@@ -138,7 +139,7 @@ databaseChangeLog:
                     primaryKey: true
               - column:
                   name: session_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: fk_datalog_session_id

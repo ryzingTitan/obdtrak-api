@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping(path = ["/api/sessions"])
@@ -50,7 +51,7 @@ class DatalogController(
         ],
     )
     suspend fun getDatalogsBySessionId(
-        @PathVariable(name = "sessionId") sessionId: Int,
+        @PathVariable(name = "sessionId") sessionId: UUID,
     ): Flow<Datalog> {
         logger.info("Retrieving datalogs for session id: $sessionId")
         return datalogService.getAllBySessionId(sessionId)

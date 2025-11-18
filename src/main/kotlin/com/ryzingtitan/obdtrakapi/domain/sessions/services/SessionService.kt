@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.map
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.UUID
+import kotlin.collections.map
 
 @Service
 class SessionService(
@@ -42,7 +44,7 @@ class SessionService(
             )
         }
 
-    suspend fun create(fileUpload: FileUpload): Int {
+    suspend fun create(fileUpload: FileUpload): UUID {
         val datalogs = fileParsingService.parse(fileUpload)
 
         val firstDatalogTimestamp = datalogs.minBy { it.timestamp }.timestamp
@@ -55,7 +57,9 @@ class SessionService(
             )
 
         if (existingSession != null) {
-            val message = "A session already exists for this user and timestamp"
+            val message =
+                "A session already exists for user ${fileUpload.metadata.userEmail} " +
+                    "and timestamp $firstDatalogTimestamp - $lastDatalogTimestamp"
             logger.error(message)
             throw SessionAlreadyExistsException(message)
         }
@@ -76,31 +80,37 @@ class SessionService(
 
         datalogRepository.saveAll(datalogs.map { it.copy(sessionId = sessionId) }).collect()
 
-        logger.info("Session $sessionId created")
+        logger.info(
+            "Session created for user ${fileUpload.metadata.userEmail} " +
+                "and timestamp $firstDatalogTimestamp - $lastDatalogTimestamp",
+        )
         return sessionId
     }
 
-    suspend fun update(fileUpload: FileUpload) {
-        val existingSession = sessionRepository.findById(fileUpload.metadata.sessionId!!)
+    suspend fun update(
+        fileUpload: FileUpload,
+        sessionId: UUID,
+    ) {
+        val existingSession = sessionRepository.findById(sessionId)
 
         if (existingSession == null) {
-            val message = "Session id ${fileUpload.metadata.sessionId} does not exist"
+            val message = "Session id $sessionId does not exist"
             logger.error(message)
             throw SessionDoesNotExistException(message)
         }
 
-        datalogRepository.deleteAllBySessionId(fileUpload.metadata.sessionId).collect()
+        datalogRepository.deleteAllBySessionId(sessionId).collect()
 
         val newDatalogs = fileParsingService.parse(fileUpload)
 
-        datalogRepository.saveAll(newDatalogs).collect()
+        datalogRepository.saveAll(newDatalogs.map { it.copy(sessionId = sessionId) }).collect()
         sessionRepository.save(
             existingSession.copy(
                 carId = fileUpload.metadata.carId,
                 trackId = fileUpload.metadata.trackId,
             ),
         )
-        logger.info("Session ${fileUpload.metadata.sessionId} updated")
+        logger.info("Session $sessionId updated")
     }
 
     private val logger: Logger = LoggerFactory.getLogger(SessionService::class.java)

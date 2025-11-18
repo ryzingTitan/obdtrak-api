@@ -4,7 +4,6 @@ import java.util.UUID
 
 data class FileUploadMetadata(
     val fileName: String,
-    val sessionId: Int?,
     val trackId: UUID,
     val carId: UUID,
     val userEmail: String,

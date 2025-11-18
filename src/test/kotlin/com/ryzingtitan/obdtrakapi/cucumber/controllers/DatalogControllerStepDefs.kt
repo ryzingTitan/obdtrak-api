@@ -14,14 +14,15 @@ import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.awaitEntityList
 import org.springframework.web.reactive.function.client.awaitExchange
 import java.time.Instant
+import java.util.UUID
 
 class DatalogControllerStepDefs {
-    @When("the datalogs for session with id {int} are retrieved")
-    fun whenTheDatalogsForSessionWithIdAreRetrieved(sessionId: Int) {
+    @When("the datalogs for session with id {string} are retrieved")
+    fun whenTheDatalogsForSessionWithIdAreRetrieved(sessionId: String) {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .get()
-                .uri("/sessions/$sessionId/datalogs")
+                .uri("/sessions/${UUID.fromString(sessionId)}/datalogs")
                 .accept(MediaType.APPLICATION_JSON)
                 .header(
                     "Authorization",
@@ -42,7 +43,7 @@ class DatalogControllerStepDefs {
     @DataTableType
     fun mapDatalog(tableRow: Map<String, String>): Datalog =
         Datalog(
-            sessionId = tableRow["sessionId"]!!.toInt(),
+            sessionId = UUID.fromString(tableRow["sessionId"]),
             timestamp = Instant.parse(tableRow["timestamp"].orEmpty()),
             longitude = tableRow["longitude"]!!.toDouble(),
             latitude = tableRow["latitude"]!!.toDouble(),

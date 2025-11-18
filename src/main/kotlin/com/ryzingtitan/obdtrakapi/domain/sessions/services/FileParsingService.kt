@@ -2,7 +2,6 @@ package com.ryzingtitan.obdtrakapi.domain.sessions.services
 
 import com.ryzingtitan.obdtrakapi.data.datalogs.entities.DatalogEntity
 import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.FileUpload
-import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.FileUploadMetadata
 import kotlinx.coroutines.flow.map
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
@@ -36,10 +35,13 @@ class FileParsingService {
 
         records.forEach { record ->
             try {
-                val datalog = createDatalog(record, fileUpload.metadata)
+                val datalog = createDatalog(record)
                 datalogs.add(datalog)
             } catch (exception: Exception) {
-                logger.error("Unable to parse row: ${record.values().joinToString(",")}")
+                logger.error(
+                    "Unable to parse row: ${record.values().joinToString(",")} " +
+                        "with error: ${exception.message}",
+                )
             }
         }
 
@@ -48,10 +50,7 @@ class FileParsingService {
         return datalogs
     }
 
-    private suspend fun createDatalog(
-        row: CSVRecord,
-        metadata: FileUploadMetadata,
-    ): DatalogEntity {
+    private suspend fun createDatalog(row: CSVRecord): DatalogEntity {
         val datalogTimestamp = parseRowTimestamp(row["Device Time"])
         val longitude = row["Longitude"].toDouble()
         val latitude = row["Latitude"].toDouble()
@@ -69,7 +68,6 @@ class FileParsingService {
         }
 
         return DatalogEntity(
-            sessionId = metadata.sessionId,
             timestamp = datalogTimestamp,
             longitude = longitude,
             latitude = latitude,

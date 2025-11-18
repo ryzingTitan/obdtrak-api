@@ -14,7 +14,6 @@ class CommonRepositoryStepDefs(
             databaseClient.sql("DELETE FROM datalogs").await()
             databaseClient.sql("ALTER TABLE datalogs ALTER COLUMN ID RESTART WITH 1").await()
             databaseClient.sql("DELETE FROM sessions").await()
-            databaseClient.sql("ALTER TABLE sessions ALTER COLUMN ID RESTART WITH 1").await()
             databaseClient.sql("DELETE FROM tracks").await()
             databaseClient.sql("DELETE FROM cars").await()
         }

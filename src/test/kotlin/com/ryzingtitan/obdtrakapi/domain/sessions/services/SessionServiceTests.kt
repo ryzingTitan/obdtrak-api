@@ -77,7 +77,10 @@ class SessionServiceTests {
                 assertEquals(firstSessionEntity.id, sessionId)
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
-                assertEquals("Session $sessionId created", appender.list[0].message)
+                assertEquals(
+                    "Session created for user $USER_EMAIL and timestamp $timestamp - $timestamp",
+                    appender.list[0].message,
+                )
 
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
                 verify(mockSessionRepository, times(1)).findByUserEmailAndStartTimeAndEndTime(
@@ -106,10 +109,16 @@ class SessionServiceTests {
                         sessionService.create(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
                     }
 
-                assertEquals("A session already exists for this user and timestamp", exception.message)
+                assertEquals(
+                    "A session already exists for user $USER_EMAIL and timestamp $timestamp - $timestamp",
+                    exception.message,
+                )
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.ERROR, appender.list[0].level)
-                assertEquals("A session already exists for this user and timestamp", appender.list[0].message)
+                assertEquals(
+                    "A session already exists for user $USER_EMAIL and timestamp $timestamp - $timestamp",
+                    appender.list[0].message,
+                )
 
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
                 verify(mockSessionRepository, times(1)).findByUserEmailAndStartTimeAndEndTime(
@@ -127,7 +136,7 @@ class SessionServiceTests {
         @Test
         fun `updates an existing session`() =
             runTest {
-                val currentSessionId = 1
+                val currentSessionId = UUID.randomUUID()
                 val trackId = UUID.randomUUID()
                 val carId = UUID.randomUUID()
 
@@ -143,8 +152,9 @@ class SessionServiceTests {
                 sessionService.update(
                     FileUpload(
                         flowOf(dataBuffer),
-                        fileUploadMetadata.copy(sessionId = currentSessionId, trackId = trackId, carId = carId),
+                        fileUploadMetadata.copy(trackId = trackId, carId = carId),
                     ),
+                    currentSessionId,
                 )
 
                 assertEquals(1, appender.list.size)
@@ -162,7 +172,7 @@ class SessionServiceTests {
         @Test
         fun `does not update a session that does not exist`() =
             runTest {
-                val currentSessionId = 1
+                val currentSessionId = UUID.randomUUID()
 
                 whenever(mockSessionRepository.findById(currentSessionId)).thenReturn(null)
 
@@ -172,8 +182,9 @@ class SessionServiceTests {
                             .update(
                                 FileUpload(
                                     flowOf(dataBuffer),
-                                    fileUploadMetadata.copy(sessionId = currentSessionId),
+                                    fileUploadMetadata,
                                 ),
+                                currentSessionId,
                             )
                     }
 
@@ -226,7 +237,7 @@ class SessionServiceTests {
 
     private val firstSessionEntity =
         SessionEntity(
-            id = 1,
+            id = UUID.randomUUID(),
             userEmail = USER_EMAIL,
             userFirstName = USER_FIRST_NAME,
             userLastName = USER_LAST_NAME,
@@ -238,7 +249,7 @@ class SessionServiceTests {
 
     private val secondSessionEntity =
         SessionEntity(
-            id = 2,
+            id = UUID.randomUUID(),
             userEmail = USER_EMAIL,
             userFirstName = USER_FIRST_NAME,
             userLastName = USER_LAST_NAME,
@@ -293,7 +304,6 @@ class SessionServiceTests {
     private val fileUploadMetadata =
         FileUploadMetadata(
             fileName = "testFile.txt",
-            sessionId = null,
             trackId = trackId,
             carId = carId,
             userEmail = USER_EMAIL,
@@ -303,7 +313,7 @@ class SessionServiceTests {
 
     private val datalog =
         DatalogEntity(
-            sessionId = 2,
+            sessionId = UUID.randomUUID(),
             timestamp = timestamp,
             longitude = -86.14162,
             latitude = 42.406800000000004,

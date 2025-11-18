@@ -18,16 +18,16 @@ Feature: Create session
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:47.968Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:47.968Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
+      | id | sessionId                            | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
     And the application will log the following messages:
-      | level | message                                       |
-      | INFO  | Beginning to parse file: testFile.txt         |
-      | INFO  | File parsing completed for file: testFile.txt |
-      | INFO  | Session 1 created                             |
+      | level | message                                                                                                  |
+      | INFO  | Beginning to parse file: testFile.txt                                                                    |
+      | INFO  | File parsing completed for file: testFile.txt                                                            |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:47.968Z |
 
   Scenario: Create a new session with multiple datalogs with valid session data
     Given a file with the following rows:
@@ -40,17 +40,17 @@ Feature: Create session
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
-      | 2  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              | 14.7         |
+      | id | sessionId                            | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
+      | 2  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              | 14.7         |
     And the application will log the following messages:
-      | level | message                                       |
-      | INFO  | Beginning to parse file: testFile.txt         |
-      | INFO  | File parsing completed for file: testFile.txt |
-      | INFO  | Session 1 created                             |
+      | level | message                                                                                                  |
+      | INFO  | Beginning to parse file: testFile.txt                                                                    |
+      | INFO  | File parsing completed for file: testFile.txt                                                            |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:48.962Z |
 
   Scenario: Create a new session with missing air fuel ratio data column
     Given a file with the following rows:
@@ -63,17 +63,17 @@ Feature: Create session
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              |              |
-      | 2  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              |              |
+      | id | sessionId                            | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              |              |
+      | 2  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              |              |
     And the application will log the following messages:
-      | level | message                                       |
-      | INFO  | Beginning to parse file: testFile.txt         |
-      | INFO  | File parsing completed for file: testFile.txt |
-      | INFO  | Session 1 created                             |
+      | level | message                                                                                                  |
+      | INFO  | Beginning to parse file: testFile.txt                                                                    |
+      | INFO  | File parsing completed for file: testFile.txt                                                            |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:48.962Z |
 
   Scenario: Create a new session with datalogs with invalid session data
     Given a file with the following rows:
@@ -87,18 +87,18 @@ Feature: Create session
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
-      | 2  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    |                      | 16.5          | 95                 | 3500      |       | 7.0              | 17.5         |
-      | 3  | 1         | 2022-09-18T18:15:49.965Z | -86.14162          | 42.406800000000004  | 186.8    | 130                  | 15.0          |                    | 2500      | 79    |                  | 14.8         |
+      | id | sessionId                            | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
+      | 2  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    |                      | 16.5          | 95                 | 3500      |       | 7.0              | 17.5         |
+      | 3  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:49.965Z | -86.14162          | 42.406800000000004  | 186.8    | 130                  | 15.0          |                    | 2500      | 79    |                  | 14.8         |
     And the application will log the following messages:
-      | level | message                                       |
-      | INFO  | Beginning to parse file: testFile.txt         |
-      | INFO  | File parsing completed for file: testFile.txt |
-      | INFO  | Session 1 created                             |
+      | level | message                                                                                                  |
+      | INFO  | Beginning to parse file: testFile.txt                                                                    |
+      | INFO  | File parsing completed for file: testFile.txt                                                            |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:49.965Z |
 
   Scenario: Create a new session with datalogs with unparseable data rows
     Given a file with the following rows:
@@ -112,18 +112,18 @@ Feature: Create session
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
-      | 2  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    |                      | 16.5          | 95                 | 3500      |       | 7.0              | 17.5         |
+      | id | sessionId                            | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  |               | 166                |           | 74    | 5.6              |              |
+      | 2  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    |                      | 16.5          | 95                 | 3500      |       | 7.0              | 17.5         |
     And the application will log the following messages:
-      | level | message                                                              |
-      | INFO  | Beginning to parse file: testFile.txt                                |
-      | ERROR | Unable to parse row: Device Time,abc,def,ghi,jkl,mno,qpr,st,uv,wx,yz |
-      | INFO  | File parsing completed for file: testFile.txt                        |
-      | INFO  | Session 1 created                                                    |
+      | level | message                                                                                                                            |
+      | INFO  | Beginning to parse file: testFile.txt                                                                                              |
+      | ERROR | Unable to parse row: Device Time,abc,def,ghi,jkl,mno,qpr,st,uv,wx,yz with error: Text 'Device Time' could not be parsed at index 0 |
+      | INFO  | File parsing completed for file: testFile.txt                                                                                      |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:48.962Z                           |
 
   Scenario: Do not overwrite data for other users when creating a new session
     Given a file with the following rows:
@@ -131,30 +131,30 @@ Feature: Create session
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004  | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              | 14.9                         |
     And the following sessions exist:
-      | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | id                                   | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs exist:
-      | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
+      | sessionId                            | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:48.962Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
       | trackId                              | carId                                | userFirstName | userLastName | userEmail     |
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CREATED'
     And the following sessions will exist:
-      | id | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
-      | 2  | test@test.com  | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | id                                   | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | test2@test.com | test 2        | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:49.965Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | 00000000-0000-0000-0000-000000000000 | test@test.com  | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
-      | 2  | 2         | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
-      | 3  | 2         | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              | 14.9         |
+      | id | sessionId                            | timestamp                | longitude          | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
+      | 2  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
+      | 3  | 00000000-0000-0000-0000-000000000000 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              | 14.9         |
     And the application will log the following messages:
-      | level | message                                       |
-      | INFO  | Beginning to parse file: testFile.txt         |
-      | INFO  | File parsing completed for file: testFile.txt |
-      | INFO  | Session 2 created                             |
+      | level | message                                                                                                  |
+      | INFO  | Beginning to parse file: testFile.txt                                                                    |
+      | INFO  | File parsing completed for file: testFile.txt                                                            |
+      | INFO  | Session created for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:48.962Z |
 
   Scenario: Do not create duplicate sessions for a user
     Given a file with the following rows:
@@ -162,27 +162,27 @@ Feature: Create session
       | 18-Sep-2022 14:15:47.968 | -86.14170333333335 | 42.406800000000004  | 188.4    | 95.9                           | 3500.35         | 123.8                      | 74.56            | 5.6                            | 16.5                            | 17.5                         |
       | 18-Sep-2022 14:15:48.962 | 86.14162999999999  | -42.406816666666664 | 188.0    | 98                             | 2500            | 130                        | 79               | 7                              | 15                              | 14.9                         |
     And the following sessions exist:
-      | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | id                                   | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs exist:
-      | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1         | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
+      | sessionId                            | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
     And the user has a valid authorization token
     When the file is uploaded for a session with the following data:
       | trackId                              | carId                                | userFirstName | userLastName | userEmail     |
       | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 | test          | tester       | test@test.com |
     Then the request response status is 'CONFLICT'
     And the following sessions will exist:
-      | id | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
-      | 1  | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
+      | id                                   | userEmail     | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId                                |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | test@test.com | test          | tester       | 2022-09-18T18:15:47.968Z | 2022-09-18T18:15:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 0058ca98-5c7c-4742-a93d-f29f8445baf2 |
     And the following datalogs will exist:
-      | id | sessionId | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | 1  | 1         | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
+      | id | sessionId                            | timestamp                | longitude         | latitude            | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
+      | 1  | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | 86.14162999999999 | -42.406816666666664 | 188.0    | 130                  | 9.0           | 98                 | 1500      | 79    | 7.0              | 15.8         |
     And the application will log the following messages:
-      | level | message                                              |
-      | INFO  | Beginning to parse file: testFile.txt                |
-      | INFO  | File parsing completed for file: testFile.txt        |
-      | ERROR | A session already exists for this user and timestamp |
+      | level | message                                                                                                           |
+      | INFO  | Beginning to parse file: testFile.txt                                                                             |
+      | INFO  | File parsing completed for file: testFile.txt                                                                     |
+      | ERROR | A session already exists for user test@test.com and timestamp 2022-09-18T18:15:47.968Z - 2022-09-18T18:15:48.962Z |
 
   Scenario: A new session cannot be created with an invalid token
     Given a file with the following rows:

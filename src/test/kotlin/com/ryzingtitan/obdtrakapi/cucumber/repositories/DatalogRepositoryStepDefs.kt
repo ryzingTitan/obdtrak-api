@@ -6,9 +6,11 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
+import java.util.UUID
+import kotlin.test.assertEquals
 
 class DatalogRepositoryStepDefs(
     private val datalogRepository: DatalogRepository,
@@ -25,24 +27,37 @@ class DatalogRepositoryStepDefs(
     }
 
     @Then("the following datalogs will exist:")
-    fun thenTheFollowingDatalogsWillExist(table: DataTable) {
-        val expectedDatalogs = table.asList(DatalogEntity::class.java)
-
-        val actualDatalogs = mutableListOf<DatalogEntity>()
+    fun thenTheFollowingDatalogsWillExist(expectedDatalogs: List<DatalogEntity>) {
         runBlocking {
-            datalogRepository.findAll().collect { datalog ->
-                actualDatalogs.add(datalog)
+            val actualDatalogs = datalogRepository.findAll().toList()
+
+            assertEquals(expectedDatalogs.size, actualDatalogs.size)
+
+            expectedDatalogs.forEachIndexed { index, expectedDatalog ->
+                if (expectedDatalog.sessionId != UUID.fromString("00000000-0000-0000-0000-000000000000")) {
+                    assertEquals(expectedDatalog.sessionId, actualDatalogs[index].sessionId)
+                }
+
+                assertEquals(expectedDatalog.timestamp, actualDatalogs[index].timestamp)
+                assertEquals(expectedDatalog.longitude, actualDatalogs[index].longitude)
+                assertEquals(expectedDatalog.latitude, actualDatalogs[index].latitude)
+                assertEquals(expectedDatalog.altitude, actualDatalogs[index].altitude)
+                assertEquals(expectedDatalog.intakeAirTemperature, actualDatalogs[index].intakeAirTemperature)
+                assertEquals(expectedDatalog.boostPressure, actualDatalogs[index].boostPressure)
+                assertEquals(expectedDatalog.coolantTemperature, actualDatalogs[index].coolantTemperature)
+                assertEquals(expectedDatalog.engineRpm, actualDatalogs[index].engineRpm)
+                assertEquals(expectedDatalog.speed, actualDatalogs[index].speed)
+                assertEquals(expectedDatalog.throttlePosition, actualDatalogs[index].throttlePosition)
+                assertEquals(expectedDatalog.airFuelRatio, actualDatalogs[index].airFuelRatio)
             }
         }
-
-        assertEquals(expectedDatalogs, actualDatalogs)
     }
 
     @DataTableType
     fun mapDatalogEntity(tableRow: Map<String, String>): DatalogEntity =
         DatalogEntity(
             id = tableRow["id"]?.toLong(),
-            sessionId = tableRow["sessionId"]?.toInt(),
+            sessionId = UUID.fromString(tableRow["sessionId"]),
             timestamp = Instant.parse(tableRow["timestamp"].orEmpty()),
             longitude = tableRow["longitude"]!!.toDouble(),
             latitude = tableRow["latitude"]!!.toDouble(),

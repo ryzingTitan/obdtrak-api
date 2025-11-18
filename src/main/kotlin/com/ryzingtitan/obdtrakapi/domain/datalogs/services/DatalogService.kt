@@ -6,12 +6,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 
 @Service
 class DatalogService(
     private val datalogRepository: DatalogRepository,
 ) {
-    suspend fun getAllBySessionId(sessionId: Int): Flow<Datalog> =
+    suspend fun getAllBySessionId(sessionId: UUID): Flow<Datalog> =
         datalogRepository
             .findAllBySessionIdOrderByTimestampAsc(sessionId)
             .map { datalogEntity ->
