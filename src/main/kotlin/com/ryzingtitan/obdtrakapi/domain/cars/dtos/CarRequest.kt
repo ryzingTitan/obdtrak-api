@@ -1,9 +1,6 @@
 package com.ryzingtitan.obdtrakapi.domain.cars.dtos
 
-import java.util.UUID
-
-data class Car(
-    val id: UUID,
+data class CarRequest(
     val year: Int,
     val make: String,
     val model: String,

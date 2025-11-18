@@ -1,6 +1,7 @@
 package com.ryzingtitan.obdtrakapi.presentation.controllers
 
 import com.ryzingtitan.obdtrakapi.domain.cars.dtos.Car
+import com.ryzingtitan.obdtrakapi.domain.cars.dtos.CarRequest
 import com.ryzingtitan.obdtrakapi.domain.cars.services.CarService
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -16,6 +17,7 @@ import org.springframework.security.test.web.reactive.server.SecurityMockServerC
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
+import java.util.UUID
 
 class CarControllerTests {
     @Nested
@@ -44,13 +46,13 @@ class CarControllerTests {
         @Test
         fun `returns 'CREATED' status and creates new car`() =
             runTest {
-                whenever(mockCarService.create(firstCar.copy(id = null))).thenReturn(firstCar)
+                whenever(mockCarService.create(firstCarRequest)).thenReturn(firstCar)
 
                 webTestClient
                     .mutateWith(mockJwt())
                     .post()
                     .uri("/api/cars")
-                    .bodyValue(firstCar.copy(id = null))
+                    .bodyValue(firstCarRequest)
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
@@ -58,7 +60,7 @@ class CarControllerTests {
                     .expectBody<Car>()
                     .isEqualTo(firstCar)
 
-                verify(mockCarService, times(1)).create(firstCar.copy(id = null))
+                verify(mockCarService, times(1)).create(firstCarRequest)
             }
     }
 
@@ -67,13 +69,13 @@ class CarControllerTests {
         @Test
         fun `returns 'OK' status and updates car`() =
             runTest {
-                whenever(mockCarService.update(firstCar)).thenReturn(firstCar)
+                whenever(mockCarService.update(firstCarId, firstCarRequest)).thenReturn(firstCar)
 
                 webTestClient
                     .mutateWith(mockJwt())
                     .put()
-                    .uri("/api/cars/$FIRST_CAR_ID")
-                    .bodyValue(firstCar)
+                    .uri("/api/cars/$firstCarId")
+                    .bodyValue(firstCarRequest)
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
@@ -81,7 +83,7 @@ class CarControllerTests {
                     .expectBody<Car>()
                     .isEqualTo(firstCar)
 
-                verify(mockCarService, times(1)).update(firstCar)
+                verify(mockCarService, times(1)).update(firstCarId, firstCarRequest)
             }
     }
 
@@ -93,13 +95,13 @@ class CarControllerTests {
                 webTestClient
                     .mutateWith(mockJwt())
                     .delete()
-                    .uri("/api/cars/$FIRST_CAR_ID")
+                    .uri("/api/cars/$firstCarId")
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
                     .isOk
 
-                verify(mockCarService, times(1)).delete(FIRST_CAR_ID)
+                verify(mockCarService, times(1)).delete(firstCarId)
             }
     }
 
@@ -113,9 +115,19 @@ class CarControllerTests {
 
     private val mockCarService = mock<CarService>()
 
+    private val firstCarId = UUID.randomUUID()
+    private val secondCarId = UUID.randomUUID()
+
+    private val firstCarRequest =
+        CarRequest(
+            year = FIRST_CAR_YEAR,
+            make = FIRST_CAR_MAKE,
+            model = FIRST_CAR_MODEL,
+        )
+
     private val firstCar =
         Car(
-            id = FIRST_CAR_ID,
+            id = firstCarId,
             year = FIRST_CAR_YEAR,
             make = FIRST_CAR_MAKE,
             model = FIRST_CAR_MODEL,
@@ -123,19 +135,17 @@ class CarControllerTests {
 
     private val secondCar =
         Car(
-            id = SECOND_CAR_ID,
+            id = secondCarId,
             year = SECOND_CAR_YEAR,
             make = SECOND_CAR_MAKE,
             model = SECOND_CAR_MODEL,
         )
 
     companion object CarControllerTestConstants {
-        const val FIRST_CAR_ID = 1
         const val FIRST_CAR_YEAR = 1999
         const val FIRST_CAR_MAKE = "Chevrolet"
         const val FIRST_CAR_MODEL = "Corvette"
 
-        const val SECOND_CAR_ID = 2
         const val SECOND_CAR_YEAR = 2001
         const val SECOND_CAR_MAKE = "Volkswagen"
         const val SECOND_CAR_MODEL = "Jetta"

@@ -11,7 +11,6 @@ import io.cucumber.java.en.When
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.core.io.FileSystemResource
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.MultipartBodyBuilder
@@ -128,8 +127,6 @@ class SessionControllerStepDefs {
 
     private fun handleSessionResponse(clientResponse: ClientResponse) {
         responseStatus = clientResponse.statusCode() as HttpStatus
-        CommonControllerStepDefs.locationHeader =
-            clientResponse.headers().header(HttpHeaders.LOCATION).firstOrNull() ?: ""
     }
 
     private suspend fun handleMultipleSessionResponse(clientResponse: ClientResponse) {

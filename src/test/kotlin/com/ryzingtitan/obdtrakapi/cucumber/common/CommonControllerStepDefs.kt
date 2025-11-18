@@ -49,7 +49,6 @@ class CommonControllerStepDefs {
     companion object CommonControllerStepDefsSharedState {
         internal var responseStatus: HttpStatus? = null
         internal var authorizationToken: SignedJWT? = null
-        internal var locationHeader: String = ""
 
         internal lateinit var webClient: WebClient
         internal lateinit var mockOAuth2Server: MockOAuth2Server
