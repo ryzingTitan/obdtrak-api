@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -25,7 +26,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBodyList
-import org.springframework.web.reactive.function.BodyInserters
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
@@ -63,9 +63,6 @@ class SessionControllerTests {
         @Test
         fun `returns 'CREATED' status and creates new session`() =
             runTest {
-                val sessionId = 1
-                whenever(mockSessionService.create(any<FileUpload>())).thenReturn(sessionId)
-
                 Files.createDirectory(Path.of("testFiles"))
                 Files.write(Path.of("testFiles", "testFile.txt"), listOf(""))
 
@@ -82,7 +79,7 @@ class SessionControllerTests {
                 webTestClient
                     .post()
                     .uri("/api/sessions")
-                    .body(BodyInserters.fromMultipartData(multiPartData))
+                    .bodyValue(multiPartData)
                     .exchange()
                     .expectStatus()
                     .isCreated
@@ -108,17 +105,17 @@ class SessionControllerTests {
                 multipartBodyBuilder.part("uploadFile", FileSystemResource("testFiles/testFile.txt"))
                 val multiPartData = multipartBodyBuilder.build()
 
-                val sessionId = 5
+                val sessionId = UUID.randomUUID()
 
                 webTestClient
                     .put()
                     .uri("/api/sessions/$sessionId")
-                    .body(BodyInserters.fromMultipartData(multiPartData))
+                    .bodyValue(multiPartData)
                     .exchange()
                     .expectStatus()
                     .isOk
 
-                verify(mockSessionService, times(1)).update(any<FileUpload>())
+                verify(mockSessionService, times(1)).update(any<FileUpload>(), eq(sessionId))
             }
     }
 
@@ -145,7 +142,7 @@ class SessionControllerTests {
 
     private val firstSession =
         Session(
-            id = 1,
+            id = UUID.randomUUID(),
             startTime = Instant.now(),
             endTime = Instant.now().plusSeconds(60),
             trackName = TRACK_NAME,
@@ -158,7 +155,7 @@ class SessionControllerTests {
 
     private val secondSession =
         Session(
-            id = 2,
+            id = UUID.randomUUID(),
             startTime = Instant.now().plusSeconds(120),
             endTime = Instant.now().plusSeconds(180),
             trackName = TRACK_NAME,

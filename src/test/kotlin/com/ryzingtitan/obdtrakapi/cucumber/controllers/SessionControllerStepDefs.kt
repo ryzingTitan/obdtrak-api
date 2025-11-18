@@ -14,11 +14,11 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.client.MultipartBodyBuilder
-import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.awaitEntityList
 import org.springframework.web.reactive.function.client.awaitExchange
 import java.time.Instant
+import java.util.UUID
 
 class SessionControllerStepDefs {
     @When("the sessions are retrieved for user {string}")
@@ -54,7 +54,7 @@ class SessionControllerStepDefs {
             CommonControllerStepDefs.webClient
                 .post()
                 .uri("/sessions")
-                .body(BodyInserters.fromMultipartData(multiPartData))
+                .bodyValue(multiPartData)
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
@@ -64,9 +64,9 @@ class SessionControllerStepDefs {
         }
     }
 
-    @When("the file is uploaded for a session with the following data and session id {int}:")
+    @When("the file is uploaded for a session with the following data and session id {string}:")
     fun theFileIsUploadedForSessionWithTheFollowingDataAndSessionId(
-        sessionId: Int,
+        sessionId: String,
         table: DataTable,
     ) {
         val requestData = table.asList(RequestData::class.java)
@@ -83,8 +83,8 @@ class SessionControllerStepDefs {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .put()
-                .uri("/sessions/$sessionId")
-                .body(BodyInserters.fromMultipartData(multiPartData))
+                .uri("/sessions/${UUID.fromString(sessionId)}")
+                .bodyValue(multiPartData)
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
@@ -114,7 +114,7 @@ class SessionControllerStepDefs {
     @DataTableType
     fun mapSession(tableRow: Map<String, String>): Session =
         Session(
-            id = tableRow["id"]!!.toInt(),
+            id = UUID.fromString(tableRow["id"]),
             startTime = Instant.parse(tableRow["startTime"].orEmpty()),
             endTime = Instant.parse(tableRow["endTime"].orEmpty()),
             trackName = tableRow["trackName"].orEmpty(),

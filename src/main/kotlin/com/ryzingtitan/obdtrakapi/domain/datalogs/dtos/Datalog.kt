@@ -1,9 +1,10 @@
 package com.ryzingtitan.obdtrakapi.domain.datalogs.dtos
 
 import java.time.Instant
+import java.util.UUID
 
 data class Datalog(
-    val sessionId: Int,
+    val sessionId: UUID,
     val timestamp: Instant,
     val longitude: Double,
     val latitude: Double,

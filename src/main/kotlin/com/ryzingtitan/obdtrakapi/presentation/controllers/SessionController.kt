@@ -111,7 +111,6 @@ class SessionController(
                     metadata =
                         FileUploadMetadata(
                             fileName = uploadFile.filename(),
-                            sessionId = null,
                             carId = UUID.fromString(carId),
                             trackId = UUID.fromString(trackId),
                             userEmail = userEmail,
@@ -163,7 +162,7 @@ class SessionController(
         @RequestPart(name = "trackId") trackId: String,
         @RequestPart(name = "carId") carId: String,
         @RequestPart(name = "uploadFile") uploadFile: FilePart,
-        @PathVariable(name = "sessionId") sessionId: Int,
+        @PathVariable(name = "sessionId") sessionId: UUID,
     ) {
         val fileUpload =
             FileUpload(
@@ -171,7 +170,6 @@ class SessionController(
                 metadata =
                     FileUploadMetadata(
                         fileName = uploadFile.filename(),
-                        sessionId = sessionId,
                         trackId = UUID.fromString(trackId),
                         carId = UUID.fromString(carId),
                         userEmail = userEmail,
@@ -179,7 +177,7 @@ class SessionController(
                         userLastName = userLastName,
                     ),
             )
-        sessionService.update(fileUpload)
+        sessionService.update(fileUpload, sessionId)
     }
 
     private val logger = LoggerFactory.getLogger(SessionController::class.java)

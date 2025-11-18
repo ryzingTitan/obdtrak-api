@@ -8,7 +8,7 @@ import java.util.UUID
 @Table("sessions")
 data class SessionEntity(
     @Id
-    val id: Int? = null,
+    val id: UUID? = null,
     val userEmail: String,
     val userFirstName: String,
     val userLastName: String,

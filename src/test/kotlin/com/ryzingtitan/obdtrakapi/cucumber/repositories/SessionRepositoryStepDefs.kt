@@ -2,46 +2,50 @@ package com.ryzingtitan.obdtrakapi.cucumber.repositories
 
 import com.ryzingtitan.obdtrakapi.data.sessions.entities.SessionEntity
 import com.ryzingtitan.obdtrakapi.data.sessions.repositories.SessionRepository
-import io.cucumber.datatable.DataTable
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import java.time.Instant
 import java.util.UUID
+import kotlin.test.assertEquals
 
 class SessionRepositoryStepDefs(
     private val sessionRepository: SessionRepository,
+    private val r2dbcEntityTemplate: R2dbcEntityTemplate,
 ) {
     @Given("the following sessions exist:")
-    fun givenTheFollowingSessionsExist(table: DataTable) {
-        val sessions = table.asList(SessionEntity::class.java)
-
-        runBlocking {
-            sessionRepository.saveAll(sessions).collect()
+    fun givenTheFollowingSessionsExist(existingSessions: List<SessionEntity>) {
+        existingSessions.forEach { sessionEntity ->
+            r2dbcEntityTemplate.insert(sessionEntity).block()
         }
     }
 
     @Then("the following sessions will exist:")
-    fun thenTheFollowingSessionsWillExist(table: DataTable) {
-        val expectedSessions = table.asList(SessionEntity::class.java)
-
-        val actualSessions = mutableListOf<SessionEntity>()
+    fun thenTheFollowingSessionsWillExist(expectedSessions: List<SessionEntity>) {
         runBlocking {
-            sessionRepository.findAll().collect { sessionEntity ->
-                actualSessions.add(sessionEntity)
+            val actualSessions = sessionRepository.findAll().toList()
+
+            assertEquals(expectedSessions.size, actualSessions.size)
+
+            expectedSessions.forEachIndexed { index, expectedSession ->
+                assertEquals(expectedSession.userEmail, actualSessions[index].userEmail)
+                assertEquals(expectedSession.userFirstName, actualSessions[index].userFirstName)
+                assertEquals(expectedSession.userLastName, actualSessions[index].userLastName)
+                assertEquals(expectedSession.startTime, actualSessions[index].startTime)
+                assertEquals(expectedSession.endTime, actualSessions[index].endTime)
+                assertEquals(expectedSession.trackId, actualSessions[index].trackId)
+                assertEquals(expectedSession.carId, actualSessions[index].carId)
             }
         }
-
-        assertEquals(expectedSessions, actualSessions)
     }
 
     @DataTableType
     fun mapSessionEntity(tableRow: Map<String, String>): SessionEntity =
         SessionEntity(
-            id = tableRow["id"]?.toIntOrNull(),
+            id = if (tableRow["id"].isNullOrEmpty()) null else UUID.fromString(tableRow["id"]),
             userEmail = tableRow["userEmail"].orEmpty(),
             userFirstName = tableRow["userFirstName"].orEmpty(),
             userLastName = tableRow["userLastName"].orEmpty(),
