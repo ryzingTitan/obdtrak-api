@@ -2,16 +2,16 @@ Feature: Retrieve all sessions for user
 
   Background:
     Given the following tracks exist:
-      | name       | longitude | latitude |
-      | Test Track | -90.1374  | 45.4086  |
+      | id                                   | name       | longitude | latitude |
+      | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | Test Track | -90.1374  | 45.4086  |
     And the following cars exist:
       | yearManufactured | make       | model |
       | 2001             | Volkswagen | Jetta |
     And the following sessions exist:
-      | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId | carId |
-      | test@test.com  | Test          | Tester       | 2022-09-18T14:15:47.968Z | 2022-09-18T14:17:48.962Z | 1       | 1     |
-      | test2@test.com | Test 2        | Tester       | 2022-09-18T14:15:47.968Z | 2022-09-18T14:17:48.962Z | 1       | 1     |
-      | test@test.com  | Test          | Tester       | 2022-09-18T14:15:47.965Z | 2022-09-18T14:15:49.968Z | 1       | 1     |
+      | userEmail      | userFirstName | userLastName | startTime                | endTime                  | trackId                              | carId |
+      | test@test.com  | Test          | Tester       | 2022-09-18T14:15:47.968Z | 2022-09-18T14:17:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
+      | test2@test.com | Test 2        | Tester       | 2022-09-18T14:15:47.968Z | 2022-09-18T14:17:48.962Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
+      | test@test.com  | Test          | Tester       | 2022-09-18T14:15:47.965Z | 2022-09-18T14:15:49.968Z | b3bb8336-c262-40e0-8bd0-c7f2bb091ff5 | 1     |
 
   Scenario: Retrieve sessions for active user
     Given the user has a valid authorization token
