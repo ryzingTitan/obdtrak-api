@@ -4,7 +4,6 @@ import com.ryzingtitan.obdtrakapi.cucumber.common.CommonControllerStepDefs
 import com.ryzingtitan.obdtrakapi.cucumber.common.CommonControllerStepDefs.CommonControllerStepDefsSharedState.responseStatus
 import com.ryzingtitan.obdtrakapi.cucumber.dtos.RequestData
 import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.Session
-import io.cucumber.datatable.DataTable
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -38,9 +37,7 @@ class SessionControllerStepDefs {
     }
 
     @When("the file is uploaded for a session with the following data:")
-    fun theFileIsUploadedForSessionWithTheFollowingData(table: DataTable) {
-        val requestData = table.asList(RequestData::class.java)
-
+    fun theFileIsUploadedForSessionWithTheFollowingData(requestData: List<RequestData>) {
         val multipartBodyBuilder = MultipartBodyBuilder()
         multipartBodyBuilder.part("userEmail", requestData.first().userEmail)
         multipartBodyBuilder.part("userLastName", requestData.first().userLastName)
@@ -67,10 +64,8 @@ class SessionControllerStepDefs {
     @When("the file is uploaded for a session with the following data and session id {string}:")
     fun theFileIsUploadedForSessionWithTheFollowingDataAndSessionId(
         sessionId: String,
-        table: DataTable,
+        requestData: List<RequestData>,
     ) {
-        val requestData = table.asList(RequestData::class.java)
-
         val multipartBodyBuilder = MultipartBodyBuilder()
         multipartBodyBuilder.part("userEmail", requestData.first().userEmail)
         multipartBodyBuilder.part("userLastName", requestData.first().userLastName)
@@ -95,9 +90,7 @@ class SessionControllerStepDefs {
     }
 
     @Then("the following sessions are returned:")
-    fun thenTheFollowingSessionsAreReturned(table: DataTable) {
-        val expectedSessions = table.asList(Session::class.java)
-
+    fun thenTheFollowingSessionsAreReturned(expectedSessions: List<Session>) {
         assertEquals(expectedSessions, returnedSessions)
     }
 

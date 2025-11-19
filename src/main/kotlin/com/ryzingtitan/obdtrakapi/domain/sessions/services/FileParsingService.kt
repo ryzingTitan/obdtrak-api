@@ -67,6 +67,21 @@ class FileParsingService {
             airFuelRatio = row["Air Fuel Ratio(Measured)(:1)"].toFloatOrNull()
         }
 
+        var oilPressure: Float? = null
+        if (row.isMapped("[GM]Oil Pressure <2005(psi)")) {
+            oilPressure = row["[GM]Oil Pressure <2005(psi)"].toFloatOrNull()
+        }
+
+        var manifoldPressure: Float? = null
+        if (row.isMapped("Intake Manifold Pressure(psi)")) {
+            manifoldPressure = row["Intake Manifold Pressure(psi)"].toFloatOrNull()
+        }
+
+        var massAirFlow: Float? = null
+        if (row.isMapped("Mass Air Flow Rate(g/s)")) {
+            massAirFlow = row["Mass Air Flow Rate(g/s)"].toFloatOrNull()
+        }
+
         return RecordEntity(
             timestamp = recordTimestamp,
             longitude = longitude,
@@ -79,6 +94,9 @@ class FileParsingService {
             speed = speed,
             throttlePosition = throttlePosition,
             airFuelRatio = airFuelRatio,
+            oilPressure = oilPressure,
+            manifoldPressure = manifoldPressure,
+            massAirFlow = massAirFlow,
         )
     }
 

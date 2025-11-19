@@ -61,14 +61,24 @@ class FileParsingServiceTests {
             }
 
         @Test
-        fun `parses file correctly when air fuel ratio column is missing`() =
+        fun `parses file correctly when columns are missing`() =
             runTest {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(missingAirFuelRatioFileData.toByteArray())
 
                 val recordEntities = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
-                assertEquals(listOf(firstRecordEntity.copy(airFuelRatio = null)), recordEntities)
+                assertEquals(
+                    listOf(
+                        firstRecordEntity.copy(
+                            airFuelRatio = null,
+                            oilPressure = null,
+                            manifoldPressure = null,
+                            massAirFlow = null,
+                        ),
+                    ),
+                    recordEntities,
+                )
                 assertEquals(2, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -149,8 +159,8 @@ class FileParsingServiceTests {
 
     private val validFileData =
         """
-        GPS Time, Device Time, Longitude, Latitude,GPS Speed (Meters/second), Horizontal Dilution of Precision, Altitude, Bearing, G(x), G(y), G(z), G(calibrated), Air Fuel Ratio(Measured)(:1),Engine Coolant Temperature(°F),Engine RPM(rpm),Intake Air Temperature(°F),Speed (OBD)(mph),Throttle Position(Manifold)(%),Turbo Boost & Vacuum Gauge(psi)
-        Sat Oct 21 16:22:38 EDT 2023,$FIRST_LINE_DEVICE_TIME,$FIRST_LINE_LONGITUDE,$FIRST_LINE_LATITUDE,10.260987281799316,1.7999999523162842,$FIRST_LINE_ALTITUDE,340.0299987792969,7.44,0.16,1.97,-0.2,$FIRST_LINE_AIR_FUEL_RATIO,$FIRST_LINE_COOLANT_TEMPERATURE,$FIRST_LINE_ENGINE_RPM,$FIRST_LINE_INTAKE_AIR_TEMPERATURE,$FIRST_LINE_SPEED,$FIRST_LINE_THROTTLE_POSITION,$FIRST_LINE_BOOST_PRESSURE
+        GPS Time, Device Time, Longitude, Latitude,GPS Speed (Meters/second), Horizontal Dilution of Precision, Altitude, Bearing, G(x), G(y), G(z), G(calibrated), Air Fuel Ratio(Measured)(:1),Engine Coolant Temperature(°F),Engine RPM(rpm),Intake Air Temperature(°F),Speed (OBD)(mph),Throttle Position(Manifold)(%),Turbo Boost & Vacuum Gauge(psi),[GM]Oil Pressure <2005(psi),Intake Manifold Pressure(psi),Mass Air Flow Rate(g/s)
+        Sat Oct 21 16:22:38 EDT 2023,$FIRST_LINE_DEVICE_TIME,$FIRST_LINE_LONGITUDE,$FIRST_LINE_LATITUDE,10.260987281799316,1.7999999523162842,$FIRST_LINE_ALTITUDE,340.0299987792969,7.44,0.16,1.97,-0.2,$FIRST_LINE_AIR_FUEL_RATIO,$FIRST_LINE_COOLANT_TEMPERATURE,$FIRST_LINE_ENGINE_RPM,$FIRST_LINE_INTAKE_AIR_TEMPERATURE,$FIRST_LINE_SPEED,$FIRST_LINE_THROTTLE_POSITION,$FIRST_LINE_BOOST_PRESSURE,$FIRST_LINE_OIL_PRESSURE,$FIRST_LINE_MANIFOLD_PRESSURE,$FIRST_LINE_MASS_AIR_FLOW
         """.trimIndent()
 
     private val missingAirFuelRatioFileData =
@@ -184,6 +194,9 @@ class FileParsingServiceTests {
             speed = FIRST_LINE_SPEED,
             throttlePosition = FIRST_LINE_THROTTLE_POSITION,
             airFuelRatio = FIRST_LINE_AIR_FUEL_RATIO,
+            oilPressure = FIRST_LINE_OIL_PRESSURE,
+            manifoldPressure = FIRST_LINE_MANIFOLD_PRESSURE,
+            massAirFlow = FIRST_LINE_MASS_AIR_FLOW,
         )
 
     private val secondRecordEntity =
@@ -199,6 +212,9 @@ class FileParsingServiceTests {
             speed = null,
             throttlePosition = null,
             airFuelRatio = null,
+            oilPressure = null,
+            manifoldPressure = null,
+            massAirFlow = null,
         )
 
     companion object FileParsingServiceTestConstants {
@@ -217,6 +233,9 @@ class FileParsingServiceTests {
         const val FIRST_LINE_SPEED = 86
         const val FIRST_LINE_THROTTLE_POSITION = 95.5f
         const val FIRST_LINE_AIR_FUEL_RATIO = 14.7f
+        const val FIRST_LINE_OIL_PRESSURE = 45.2f
+        const val FIRST_LINE_MANIFOLD_PRESSURE = 6.8f
+        const val FIRST_LINE_MASS_AIR_FLOW = 40.0f
 
         const val SECOND_LINE_DEVICE_TIME = "18-Sep-2022 14:18:47.968"
         const val SECOND_LINE_LONGITUDE = 86.14162999999999

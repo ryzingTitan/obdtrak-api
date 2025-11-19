@@ -13,14 +13,14 @@ Feature: Get records
 
   Scenario: Retrieve records for a session with a single record
     Given the following records exist:
-      | sessionId                            | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 15.6          | 150                | 5000      | 85    | 75.6             | 14.7         |
+      | sessionId                            | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio | oilPressure | manifoldPressure | massAirFlow |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 15.6          | 150                | 5000      | 85    | 75.6             | 14.7         | 45.0        | 7.2              | 38.3        |
     And the user has a valid authorization token
     When the records for session with id 'edc62dac-3b41-4b0e-8e2c-864c7c91fec4' are retrieved
     Then the request response status is 'OK'
     And the following records are returned:
-      | sessionId                            | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio |
-      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 15.6          | 150                | 5000      | 85    | 75.6             | 14.7         |
+      | sessionId                            | timestamp                | longitude          | latitude           | altitude | intakeAirTemperature | boostPressure | coolantTemperature | engineRpm | speed | throttlePosition | airFuelRatio | oilPressure | manifoldPressure | massAirFlow |
+      | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004 | 188.4    | 123                  | 15.6          | 150                | 5000      | 85    | 75.6             | 14.7         | 45.0        | 7.2              | 38.3        |
     And the application will log the following messages:
       | level | message                                                                 |
       | INFO  | Retrieving records for session id: edc62dac-3b41-4b0e-8e2c-864c7c91fec4 |

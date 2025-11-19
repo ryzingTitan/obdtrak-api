@@ -187,3 +187,12 @@ databaseChangeLog:
               - column:
                   name: air_fuel_ratio
                   type: float
+              - column:
+                  name: oil_pressure
+                  type: float
+              - column:
+                  name: manifold_pressure
+                  type: float
+              - column:
+                  name: mass_air_flow
+                  type: float

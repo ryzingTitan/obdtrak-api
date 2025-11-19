@@ -326,6 +326,9 @@ class SessionServiceTests {
             speed = 79,
             throttlePosition = 83.2f,
             airFuelRatio = 17.5f,
+            oilPressure = 45.2f,
+            manifoldPressure = 6.8f,
+            massAirFlow = 40.0f,
         )
 
     companion object SessionServiceTestConstants {

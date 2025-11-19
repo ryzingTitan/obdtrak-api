@@ -21,4 +21,7 @@ data class RecordEntity(
     val speed: Int?,
     val throttlePosition: Float?,
     val airFuelRatio: Float?,
+    val oilPressure: Float?,
+    val manifoldPressure: Float?,
+    val massAirFlow: Float?,
 )
