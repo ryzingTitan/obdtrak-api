@@ -6,8 +6,8 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-class ObdTrakApiApplication
+class ObdTrakApplication
 
 fun main(args: Array<String>) {
-    runApplication<ObdTrakApiApplication>(arrayOf(args).contentDeepToString())
+    runApplication<ObdTrakApplication>(arrayOf(args).contentDeepToString())
 }

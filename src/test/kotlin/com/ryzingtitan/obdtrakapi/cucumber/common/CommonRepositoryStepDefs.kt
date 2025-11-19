@@ -11,8 +11,7 @@ class CommonRepositoryStepDefs(
     @After
     fun resetDatabase() {
         runBlocking {
-            databaseClient.sql("DELETE FROM datalogs").await()
-            databaseClient.sql("ALTER TABLE datalogs ALTER COLUMN ID RESTART WITH 1").await()
+            databaseClient.sql("DELETE FROM records").await()
             databaseClient.sql("DELETE FROM sessions").await()
             databaseClient.sql("DELETE FROM tracks").await()
             databaseClient.sql("DELETE FROM cars").await()

@@ -1,8 +1,8 @@
-package com.ryzingtitan.obdtrakapi.domain.datalogs.services
+package com.ryzingtitan.obdtrakapi.domain.records.services
 
-import com.ryzingtitan.obdtrakapi.data.datalogs.entities.DatalogEntity
-import com.ryzingtitan.obdtrakapi.data.datalogs.repositories.DatalogRepository
-import com.ryzingtitan.obdtrakapi.domain.datalogs.dtos.Datalog
+import com.ryzingtitan.obdtrakapi.data.records.entities.RecordEntity
+import com.ryzingtitan.obdtrakapi.data.records.repositories.RecordRepository
+import com.ryzingtitan.obdtrakapi.domain.records.dtos.Record
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -17,36 +17,36 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
-class DatalogServiceTests {
+class RecordServiceTests {
     @Nested
     inner class GetAllBySessionId {
         @Test
-        fun `returns all datalogs with the session id that is provided`() =
+        fun `returns all records with the session id that is provided`() =
             runTest {
-                whenever(mockDatalogRepository.findAllBySessionIdOrderByTimestampAsc(sessionId))
-                    .thenReturn(flowOf(firstDatalogEntity, secondDatalogEntity))
+                whenever(mockRecordRepository.findAllBySessionIdOrderByTimestampAsc(sessionId))
+                    .thenReturn(flowOf(firstRecordEntity, secondRecordEntity))
 
-                val datalogs = datalogService.getAllBySessionId(sessionId)
+                val records = recordService.getAllBySessionId(sessionId)
 
-                assertEquals(listOf(firstExpectedDatalog, secondExpectedDatalog), datalogs.toList())
+                assertEquals(listOf(firstExpectedRecord, secondExpectedRecord), records.toList())
             }
     }
 
     @BeforeEach
     fun setup() {
-        datalogService = DatalogService(mockDatalogRepository)
-        reset(mockDatalogRepository)
+        recordService = RecordService(mockRecordRepository)
+        reset(mockRecordRepository)
     }
 
-    private lateinit var datalogService: DatalogService
+    private lateinit var recordService: RecordService
 
-    private val mockDatalogRepository = mock<DatalogRepository>()
+    private val mockRecordRepository = mock<RecordRepository>()
 
     private val timestamp = Instant.now()
     private val sessionId = UUID.randomUUID()
 
-    private val firstDatalogEntity =
-        DatalogEntity(
+    private val firstRecordEntity =
+        RecordEntity(
             sessionId = sessionId,
             timestamp = timestamp,
             longitude = -86.14162,
@@ -61,8 +61,8 @@ class DatalogServiceTests {
             airFuelRatio = 15.8f,
         )
 
-    private val secondDatalogEntity =
-        DatalogEntity(
+    private val secondRecordEntity =
+        RecordEntity(
             sessionId = sessionId,
             timestamp = timestamp,
             longitude = 86.14162,
@@ -77,8 +77,8 @@ class DatalogServiceTests {
             airFuelRatio = null,
         )
 
-    private val firstExpectedDatalog =
-        Datalog(
+    private val firstExpectedRecord =
+        Record(
             sessionId = sessionId,
             timestamp = timestamp.truncatedTo(ChronoUnit.MILLIS),
             longitude = -86.14162,
@@ -93,8 +93,8 @@ class DatalogServiceTests {
             airFuelRatio = 15.8f,
         )
 
-    private val secondExpectedDatalog =
-        Datalog(
+    private val secondExpectedRecord =
+        Record(
             sessionId = sessionId,
             timestamp = timestamp.truncatedTo(ChronoUnit.MILLIS),
             longitude = 86.14162,

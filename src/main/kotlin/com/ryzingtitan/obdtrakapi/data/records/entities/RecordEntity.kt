@@ -1,14 +1,14 @@
-package com.ryzingtitan.obdtrakapi.data.datalogs.entities
+package com.ryzingtitan.obdtrakapi.data.records.entities
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 import java.util.UUID
 
-@Table("datalogs")
-data class DatalogEntity(
+@Table("records")
+data class RecordEntity(
     @Id
-    val id: Long? = null,
+    val id: UUID? = null,
     val sessionId: UUID? = null,
     val timestamp: Instant,
     val longitude: Double,

@@ -1,12 +1,12 @@
 spring:
   liquibase:
-    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DATALOG_API
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS OBD_TRAK
     user: sa
     password: sa
-    default-schema: datalog_api
-    liquibase-schema: datalog_api
+    default-schema: obd_trak
+    liquibase-schema: obd_trak
   r2dbc:
-    url: r2dbc:h2:mem:///db?options=DB_CLOSE_DELAY=-1;SCHEMA=datalog_api
+    url: r2dbc:h2:mem:///db?options=DB_CLOSE_DELAY=-1;SCHEMA=obd_trak
     username: sa
     password: sa
   security:

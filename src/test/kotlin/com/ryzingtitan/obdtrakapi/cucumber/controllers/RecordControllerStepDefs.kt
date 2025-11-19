@@ -1,8 +1,7 @@
 package com.ryzingtitan.obdtrakapi.cucumber.controllers
 
 import com.ryzingtitan.obdtrakapi.cucumber.common.CommonControllerStepDefs
-import com.ryzingtitan.obdtrakapi.domain.datalogs.dtos.Datalog
-import io.cucumber.datatable.DataTable
+import com.ryzingtitan.obdtrakapi.domain.records.dtos.Record
 import io.cucumber.java.DataTableType
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -16,33 +15,31 @@ import org.springframework.web.reactive.function.client.awaitExchange
 import java.time.Instant
 import java.util.UUID
 
-class DatalogControllerStepDefs {
-    @When("the datalogs for session with id {string} are retrieved")
-    fun whenTheDatalogsForSessionWithIdAreRetrieved(sessionId: String) {
+class RecordControllerStepDefs {
+    @When("the records for session with id {string} are retrieved")
+    fun whenTheRecordsForSessionWithIdAreRetrieved(sessionId: String) {
         runBlocking {
             CommonControllerStepDefs.webClient
                 .get()
-                .uri("/sessions/${UUID.fromString(sessionId)}/datalogs")
+                .uri("/sessions/${UUID.fromString(sessionId)}/records")
                 .accept(MediaType.APPLICATION_JSON)
                 .header(
                     "Authorization",
                     "Bearer ${CommonControllerStepDefs.authorizationToken?.serialize()}",
                 ).awaitExchange { clientResponse ->
-                    handleMultipleDatalogResponse(clientResponse)
+                    handleMultipleRecordResponse(clientResponse)
                 }
         }
     }
 
-    @Then("the following datalogs are returned:")
-    fun thenTheFollowingDatalogsAreReturned(table: DataTable) {
-        val expectedDatalogs = table.asList(Datalog::class.java)
-
-        assertEquals(expectedDatalogs, returnedDatalogs)
+    @Then("the following records are returned:")
+    fun thenTheFollowingRecordsAreReturned(expectedRecords: List<Record>) {
+        assertEquals(expectedRecords, returnedRecords)
     }
 
     @DataTableType
-    fun mapDatalog(tableRow: Map<String, String>): Datalog =
-        Datalog(
+    fun mapRecord(tableRow: Map<String, String>): Record =
+        Record(
             sessionId = UUID.fromString(tableRow["sessionId"]),
             timestamp = Instant.parse(tableRow["timestamp"].orEmpty()),
             longitude = tableRow["longitude"]!!.toDouble(),
@@ -57,17 +54,17 @@ class DatalogControllerStepDefs {
             airFuelRatio = tableRow["airFuelRatio"]?.toFloatOrNull(),
         )
 
-    private suspend fun handleMultipleDatalogResponse(clientResponse: ClientResponse) {
+    private suspend fun handleMultipleRecordResponse(clientResponse: ClientResponse) {
         CommonControllerStepDefs.responseStatus = clientResponse.statusCode() as HttpStatus
 
         if (clientResponse.statusCode() == HttpStatus.OK) {
-            val datalogs = clientResponse.awaitEntityList<Datalog>().body
+            val records = clientResponse.awaitEntityList<Record>().body
 
-            if (datalogs != null) {
-                returnedDatalogs.addAll(datalogs)
+            if (records != null) {
+                returnedRecords.addAll(records)
             }
         }
     }
 
-    private val returnedDatalogs = mutableListOf<Datalog>()
+    private val returnedRecords = mutableListOf<Record>()
 }

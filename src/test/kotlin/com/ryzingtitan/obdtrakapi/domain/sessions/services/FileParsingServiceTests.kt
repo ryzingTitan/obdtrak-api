@@ -5,7 +5,7 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
-import com.ryzingtitan.obdtrakapi.data.datalogs.entities.DatalogEntity
+import com.ryzingtitan.obdtrakapi.data.records.entities.RecordEntity
 import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.FileUpload
 import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.FileUploadMetadata
 import kotlinx.coroutines.flow.flowOf
@@ -28,9 +28,9 @@ class FileParsingServiceTests {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(validFileData.toByteArray())
 
-                val datalogs = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
+                val recordEntities = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
-                assertEquals(listOf(firstDatalog), datalogs)
+                assertEquals(listOf(firstRecordEntity), recordEntities)
                 assertEquals(2, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -44,7 +44,7 @@ class FileParsingServiceTests {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(validFileData.toByteArray())
 
-                val datalogs =
+                val recordEntities =
                     fileParsingService.parse(
                         FileUpload(
                             flowOf(dataBuffer),
@@ -52,7 +52,7 @@ class FileParsingServiceTests {
                         ),
                     )
 
-                assertEquals(listOf(firstDatalog.copy(sessionId = null)), datalogs)
+                assertEquals(listOf(firstRecordEntity.copy(sessionId = null)), recordEntities)
                 assertEquals(2, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -66,9 +66,9 @@ class FileParsingServiceTests {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(missingAirFuelRatioFileData.toByteArray())
 
-                val datalogs = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
+                val recordEntities = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
-                assertEquals(listOf(firstDatalog.copy(airFuelRatio = null)), datalogs)
+                assertEquals(listOf(firstRecordEntity.copy(airFuelRatio = null)), recordEntities)
                 assertEquals(2, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -82,9 +82,9 @@ class FileParsingServiceTests {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(invalidFileData.toByteArray())
 
-                val datalogs = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
+                val recordEntities = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
-                assertEquals(listOf(secondDatalog), datalogs)
+                assertEquals(listOf(secondRecordEntity), recordEntities)
                 assertEquals(2, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -98,9 +98,9 @@ class FileParsingServiceTests {
                 val dataBufferFactory = DefaultDataBufferFactory()
                 val dataBuffer = dataBufferFactory.wrap(unparseableFileData.toByteArray())
 
-                val datalogs = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
+                val recordEntities = fileParsingService.parse(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
-                assertEquals(emptyList<DatalogEntity>(), datalogs)
+                assertEquals(emptyList<RecordEntity>(), recordEntities)
                 assertEquals(3, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
                 assertEquals("Beginning to parse file: testFile.txt", appender.list[0].message)
@@ -171,8 +171,8 @@ class FileParsingServiceTests {
         Sat Oct 21 16:22:38 EDT 2023,Device Time,$FIRST_LINE_LONGITUDE,$FIRST_LINE_LATITUDE,10.260987281799316,1.7999999523162842,$FIRST_LINE_ALTITUDE,340.0299987792969,7.44,0.16,1.97,-0.2,$FIRST_LINE_AIR_FUEL_RATIO,$FIRST_LINE_COOLANT_TEMPERATURE,$FIRST_LINE_ENGINE_RPM,$FIRST_LINE_INTAKE_AIR_TEMPERATURE,$FIRST_LINE_SPEED,$FIRST_LINE_THROTTLE_POSITION,$FIRST_LINE_BOOST_PRESSURE
         """.trimIndent()
 
-    private val firstDatalog =
-        DatalogEntity(
+    private val firstRecordEntity =
+        RecordEntity(
             timestamp = firstLineTimestamp,
             longitude = FIRST_LINE_LONGITUDE,
             latitude = FIRST_LINE_LATITUDE,
@@ -186,8 +186,8 @@ class FileParsingServiceTests {
             airFuelRatio = FIRST_LINE_AIR_FUEL_RATIO,
         )
 
-    private val secondDatalog =
-        DatalogEntity(
+    private val secondRecordEntity =
+        RecordEntity(
             timestamp = secondLineTimestamp,
             longitude = SECOND_LINE_LONGITUDE,
             latitude = SECOND_LINE_LATITUDE,

@@ -1,6 +1,6 @@
 package com.ryzingtitan.obdtrakapi.domain.sessions.services
 
-import com.ryzingtitan.obdtrakapi.data.datalogs.entities.DatalogEntity
+import com.ryzingtitan.obdtrakapi.data.records.entities.RecordEntity
 import com.ryzingtitan.obdtrakapi.domain.sessions.dtos.FileUpload
 import kotlinx.coroutines.flow.map
 import org.apache.commons.csv.CSVFormat
@@ -17,10 +17,10 @@ class FileParsingService {
     private val logger: Logger = LoggerFactory.getLogger(FileParsingService::class.java)
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    suspend fun parse(fileUpload: FileUpload): List<DatalogEntity> {
+    suspend fun parse(fileUpload: FileUpload): List<RecordEntity> {
         logger.info("Beginning to parse file: ${fileUpload.metadata.fileName}")
 
-        val datalogs = mutableListOf<DatalogEntity>()
+        val recordEntities = mutableListOf<RecordEntity>()
         val fileData = StringBuilder()
 
         fileUpload.file
@@ -35,8 +35,8 @@ class FileParsingService {
 
         records.forEach { record ->
             try {
-                val datalog = createDatalog(record)
-                datalogs.add(datalog)
+                val recordEntity = createRecordEntity(record)
+                recordEntities.add(recordEntity)
             } catch (exception: Exception) {
                 logger.error(
                     "Unable to parse row: ${record.values().joinToString(",")} " +
@@ -47,11 +47,11 @@ class FileParsingService {
 
         logger.info("File parsing completed for file: ${fileUpload.metadata.fileName}")
 
-        return datalogs
+        return recordEntities
     }
 
-    private suspend fun createDatalog(row: CSVRecord): DatalogEntity {
-        val datalogTimestamp = parseRowTimestamp(row["Device Time"])
+    private suspend fun createRecordEntity(row: CSVRecord): RecordEntity {
+        val recordTimestamp = parseRowTimestamp(row["Device Time"])
         val longitude = row["Longitude"].toDouble()
         val latitude = row["Latitude"].toDouble()
         val altitude = row["Altitude"].toFloat()
@@ -67,8 +67,8 @@ class FileParsingService {
             airFuelRatio = row["Air Fuel Ratio(Measured)(:1)"].toFloatOrNull()
         }
 
-        return DatalogEntity(
-            timestamp = datalogTimestamp,
+        return RecordEntity(
+            timestamp = recordTimestamp,
             longitude = longitude,
             latitude = latitude,
             altitude = altitude,

@@ -7,8 +7,8 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
 import com.ryzingtitan.obdtrakapi.data.cars.entities.CarEntity
 import com.ryzingtitan.obdtrakapi.data.cars.repositories.CarRepository
-import com.ryzingtitan.obdtrakapi.data.datalogs.entities.DatalogEntity
-import com.ryzingtitan.obdtrakapi.data.datalogs.repositories.DatalogRepository
+import com.ryzingtitan.obdtrakapi.data.records.entities.RecordEntity
+import com.ryzingtitan.obdtrakapi.data.records.repositories.RecordRepository
 import com.ryzingtitan.obdtrakapi.data.sessions.entities.SessionEntity
 import com.ryzingtitan.obdtrakapi.data.sessions.repositories.SessionRepository
 import com.ryzingtitan.obdtrakapi.data.tracks.entities.TrackEntity
@@ -59,18 +59,19 @@ class SessionServiceTests {
         @Test
         fun `creates a new session`() =
             runTest {
-                whenever(mockFileParsingService.parse(any<FileUpload>())).thenReturn(listOf(datalog))
+                whenever(mockFileParsingService.parse(any<FileUpload>())).thenReturn(listOf(recordEntity))
                 whenever(
                     mockSessionRepository.findByUserEmailAndStartTimeAndEndTime(
                         USER_EMAIL,
-                        datalog.timestamp,
-                        datalog.timestamp,
+                        recordEntity.timestamp,
+                        recordEntity.timestamp,
                     ),
                 ).thenReturn(null)
                 whenever(mockSessionRepository.save(firstSessionEntity.copy(id = null))).thenReturn(firstSessionEntity)
 
-                val updatedDatalog = datalog.copy(sessionId = firstSessionEntity.id)
-                whenever(mockDatalogRepository.saveAll(listOf(updatedDatalog))).thenReturn(flowOf(updatedDatalog))
+                val updatedRecordEntity = recordEntity.copy(sessionId = firstSessionEntity.id)
+                whenever(mockRecordRepository.saveAll(listOf(updatedRecordEntity)))
+                    .thenReturn(flowOf(updatedRecordEntity))
 
                 val sessionId = sessionService.create(FileUpload(flowOf(dataBuffer), fileUploadMetadata))
 
@@ -85,22 +86,22 @@ class SessionServiceTests {
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
                 verify(mockSessionRepository, times(1)).findByUserEmailAndStartTimeAndEndTime(
                     USER_EMAIL,
-                    datalog.timestamp,
-                    datalog.timestamp,
+                    recordEntity.timestamp,
+                    recordEntity.timestamp,
                 )
                 verify(mockSessionRepository, times(1)).save(firstSessionEntity.copy(id = null))
-                verify(mockDatalogRepository, times(1)).saveAll(listOf(datalog.copy(sessionId = sessionId)))
+                verify(mockRecordRepository, times(1)).saveAll(listOf(recordEntity.copy(sessionId = sessionId)))
             }
 
         @Test
         fun `does not create duplicate sessions for a user`() =
             runTest {
-                whenever(mockFileParsingService.parse(any<FileUpload>())).thenReturn(listOf(datalog))
+                whenever(mockFileParsingService.parse(any<FileUpload>())).thenReturn(listOf(recordEntity))
                 whenever(
                     mockSessionRepository.findByUserEmailAndStartTimeAndEndTime(
                         USER_EMAIL,
-                        datalog.timestamp,
-                        datalog.timestamp,
+                        recordEntity.timestamp,
+                        recordEntity.timestamp,
                     ),
                 ).thenReturn(firstSessionEntity)
 
@@ -123,11 +124,11 @@ class SessionServiceTests {
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
                 verify(mockSessionRepository, times(1)).findByUserEmailAndStartTimeAndEndTime(
                     USER_EMAIL,
-                    datalog.timestamp,
-                    datalog.timestamp,
+                    recordEntity.timestamp,
+                    recordEntity.timestamp,
                 )
                 verify(mockSessionRepository, never()).save(any())
-                verify(mockDatalogRepository, never()).saveAll(any<List<DatalogEntity>>())
+                verify(mockRecordRepository, never()).saveAll(any<List<RecordEntity>>())
             }
     }
 
@@ -142,12 +143,12 @@ class SessionServiceTests {
 
                 whenever(mockSessionRepository.findById(currentSessionId))
                     .thenReturn(firstSessionEntity)
-                whenever(mockDatalogRepository.deleteAllBySessionId(currentSessionId))
-                    .thenReturn(flowOf(datalog.copy(sessionId = currentSessionId)))
+                whenever(mockRecordRepository.deleteAllBySessionId(currentSessionId))
+                    .thenReturn(flowOf(recordEntity.copy(sessionId = currentSessionId)))
                 whenever(mockFileParsingService.parse(any<FileUpload>()))
-                    .thenReturn(listOf(datalog.copy(sessionId = currentSessionId)))
-                whenever(mockDatalogRepository.saveAll(listOf(datalog.copy(sessionId = currentSessionId))))
-                    .thenReturn(flowOf(datalog.copy(sessionId = currentSessionId)))
+                    .thenReturn(listOf(recordEntity.copy(sessionId = currentSessionId)))
+                whenever(mockRecordRepository.saveAll(listOf(recordEntity.copy(sessionId = currentSessionId))))
+                    .thenReturn(flowOf(recordEntity.copy(sessionId = currentSessionId)))
 
                 sessionService.update(
                     FileUpload(
@@ -162,10 +163,10 @@ class SessionServiceTests {
                 assertEquals("Session $currentSessionId updated", appender.list[0].message)
 
                 verify(mockSessionRepository, times(1)).findById(currentSessionId)
-                verify(mockDatalogRepository, times(1)).deleteAllBySessionId(currentSessionId)
+                verify(mockRecordRepository, times(1)).deleteAllBySessionId(currentSessionId)
                 verify(mockFileParsingService, times(1)).parse(any<FileUpload>())
-                verify(mockDatalogRepository, times(1))
-                    .saveAll(listOf(datalog.copy(sessionId = currentSessionId)))
+                verify(mockRecordRepository, times(1))
+                    .saveAll(listOf(recordEntity.copy(sessionId = currentSessionId)))
                 verify(mockSessionRepository, times(1)).save(firstSessionEntity.copy(trackId = trackId, carId = carId))
             }
 
@@ -194,9 +195,9 @@ class SessionServiceTests {
                 assertEquals("Session id $currentSessionId does not exist", appender.list[0].message)
 
                 verify(mockSessionRepository, times(1)).findById(currentSessionId)
-                verify(mockDatalogRepository, never()).deleteAllBySessionId(any())
+                verify(mockRecordRepository, never()).deleteAllBySessionId(any())
                 verify(mockFileParsingService, never()).parse(any())
-                verify(mockDatalogRepository, never()).saveAll(any<List<DatalogEntity>>())
+                verify(mockRecordRepository, never()).saveAll(any<List<RecordEntity>>())
                 verify(mockSessionRepository, never()).save(any())
             }
     }
@@ -209,7 +210,7 @@ class SessionServiceTests {
                 mockTrackRepository,
                 mockCarRepository,
                 mockFileParsingService,
-                mockDatalogRepository,
+                mockRecordRepository,
             )
 
         logger = LoggerFactory.getLogger(SessionService::class.java) as Logger
@@ -227,7 +228,7 @@ class SessionServiceTests {
     private val mockCarRepository = mock<CarRepository>()
     private val mockSessionRepository = mock<SessionRepository>()
     private val mockFileParsingService = mock<FileParsingService>()
-    private val mockDatalogRepository = mock<DatalogRepository>()
+    private val mockRecordRepository = mock<RecordRepository>()
 
     private val timestamp = Instant.now()
     private val dataBufferFactory = DefaultDataBufferFactory()
@@ -311,8 +312,8 @@ class SessionServiceTests {
             userLastName = USER_LAST_NAME,
         )
 
-    private val datalog =
-        DatalogEntity(
+    private val recordEntity =
+        RecordEntity(
             sessionId = UUID.randomUUID(),
             timestamp = timestamp,
             longitude = -86.14162,

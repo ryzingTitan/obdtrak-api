@@ -1,14 +1,14 @@
 spring:
   application:
-    name: datalog-api
+    name: obdtrak-api
   liquibase:
-    url: jdbc:postgresql://${DB_HOST}:5432/datalog_api?schema=datalog_api
+    url: jdbc:postgresql://${DB_HOST}:5432/obd_trak?schema=obd_trak
     user: ${DB_USER}
     password: ${DB_PASSWORD}
-    default-schema: datalog_api
-    liquibase-schema: datalog_api
+    default-schema: obd_trak
+    liquibase-schema: obd_trak
   r2dbc:
-    url: r2dbc:postgresql://${DB_HOST}:5432/datalog_api?schema=datalog_api
+    url: r2dbc:postgresql://${DB_HOST}:5432/obd_trak?schema=obd_trak
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   security:

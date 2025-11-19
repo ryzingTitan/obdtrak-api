@@ -1,7 +1,7 @@
 package com.ryzingtitan.obdtrakapi.presentation.controllers
 
-import com.ryzingtitan.obdtrakapi.domain.datalogs.dtos.Datalog
-import com.ryzingtitan.obdtrakapi.domain.datalogs.services.DatalogService
+import com.ryzingtitan.obdtrakapi.domain.records.dtos.Record
+import com.ryzingtitan.obdtrakapi.domain.records.services.RecordService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -18,20 +18,20 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(path = ["/api/sessions"])
-class DatalogController(
-    private val datalogService: DatalogService,
+class RecordController(
+    private val recordService: RecordService,
 ) {
-    private val logger = LoggerFactory.getLogger(DatalogController::class.java)
+    private val logger = LoggerFactory.getLogger(RecordController::class.java)
 
-    @GetMapping("/{sessionId}/datalogs")
-    @Tag(name = "Datalogs")
-    @Operation(summary = "Retrieve all datalogs with the given session id sorted by timestamp ascending")
+    @GetMapping("/{sessionId}/records")
+    @Tag(name = "Records")
+    @Operation(summary = "Retrieve all records with the given session id sorted by timestamp ascending")
     @SecurityRequirement(name = "jwt")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "The list of datalogs with the given session id sorted by timestamp ascending",
+                description = "The list of records with the given session id sorted by timestamp ascending",
             ),
             ApiResponse(
                 responseCode = "400",
@@ -50,10 +50,10 @@ class DatalogController(
             ),
         ],
     )
-    suspend fun getDatalogsBySessionId(
+    suspend fun getRecordsBySessionId(
         @PathVariable(name = "sessionId") sessionId: UUID,
-    ): Flow<Datalog> {
-        logger.info("Retrieving datalogs for session id: $sessionId")
-        return datalogService.getAllBySessionId(sessionId)
+    ): Flow<Record> {
+        logger.info("Retrieving records for session id: $sessionId")
+        return recordService.getAllBySessionId(sessionId)
     }
 }
