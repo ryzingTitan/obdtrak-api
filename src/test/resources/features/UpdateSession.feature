@@ -66,11 +66,11 @@ Feature: Update session
       | 00000000-0000-0000-0000-000000000000 | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:47.968Z | -86.14170333333335 | 42.406800000000004  | 188.4    | 123                  | 16.5          | 95                 | 3500      | 74    | 5.6              | 17.5         |
       | 00000000-0000-0000-0000-000000000000 | edc62dac-3b41-4b0e-8e2c-864c7c91fec4 | 2022-09-18T18:15:48.962Z | 86.14162999999999  | -42.406816666666664 | 188.0    | 130                  | 15.0          | 98                 | 2500      | 79    | 7.0              | 14.9         |
     And the application will log the following messages:
-      | level | message                                                                                                                            |
-      | INFO  | Beginning to parse file: testFile.txt                                                                                              |
-      | ERROR | Unable to parse row: Device Time,abc,def,ghi,jkl,mno,qpr,st,uv,wx,yz with error: Text 'Device Time' could not be parsed at index 0 |
-      | INFO  | File parsing completed for file: testFile.txt                                                                                      |
-      | INFO  | Session edc62dac-3b41-4b0e-8e2c-864c7c91fec4 updated                                                                               |
+      | level | message                                                                                                                               |
+      | INFO  | Beginning to parse file: testFile.txt                                                                                                 |
+      | ERROR | Unable to parse row: Device Time,abc,def,ghi,jkl,mno,qpr,st,uv,wx,yz,,, with error: Text 'Device Time' could not be parsed at index 0 |
+      | INFO  | File parsing completed for file: testFile.txt                                                                                         |
+      | INFO  | Session edc62dac-3b41-4b0e-8e2c-864c7c91fec4 updated                                                                                  |
 
   Scenario: Only update records that belong to the current user when updating a session
     Given a file with the following rows:

@@ -46,6 +46,9 @@ class RecordRepositoryStepDefs(
                 assertEquals(expectedRecord.speed, actualRecords[index].speed)
                 assertEquals(expectedRecord.throttlePosition, actualRecords[index].throttlePosition)
                 assertEquals(expectedRecord.airFuelRatio, actualRecords[index].airFuelRatio)
+                assertEquals(expectedRecord.oilPressure, actualRecords[index].oilPressure)
+                assertEquals(expectedRecord.manifoldPressure, actualRecords[index].manifoldPressure)
+                assertEquals(expectedRecord.massAirFlow, actualRecords[index].massAirFlow)
             }
         }
     }
@@ -66,5 +69,8 @@ class RecordRepositoryStepDefs(
             speed = tableRow["speed"]?.toIntOrNull(),
             throttlePosition = tableRow["throttlePosition"]?.toFloatOrNull(),
             airFuelRatio = tableRow["airFuelRatio"]?.toFloatOrNull(),
+            oilPressure = tableRow["oilPressure"]?.toFloatOrNull(),
+            manifoldPressure = tableRow["manifoldPressure"]?.toFloatOrNull(),
+            massAirFlow = tableRow["massAirFlow"]?.toFloatOrNull(),
         )
 }
