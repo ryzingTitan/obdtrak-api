@@ -1,7 +1,7 @@
 package com.ryzingtitan.obdtrakapi.domain.sessions.services
 
 import com.ryzingtitan.obdtrakapi.data.cars.repositories.CarRepository
-import com.ryzingtitan.obdtrakapi.data.datalogs.repositories.DatalogRepository
+import com.ryzingtitan.obdtrakapi.data.records.repositories.RecordRepository
 import com.ryzingtitan.obdtrakapi.data.sessions.entities.SessionEntity
 import com.ryzingtitan.obdtrakapi.data.sessions.repositories.SessionRepository
 import com.ryzingtitan.obdtrakapi.data.tracks.repositories.TrackRepository
@@ -24,7 +24,7 @@ class SessionService(
     private val trackRepository: TrackRepository,
     private val carRepository: CarRepository,
     private val fileParsingService: FileParsingService,
-    private val datalogRepository: DatalogRepository,
+    private val recordRepository: RecordRepository,
 ) {
     suspend fun getAllByUser(userEmail: String): Flow<Session> =
         sessionRepository.findAllByUserEmail(userEmail).map { sessionEntity ->
@@ -45,21 +45,21 @@ class SessionService(
         }
 
     suspend fun create(fileUpload: FileUpload): UUID {
-        val datalogs = fileParsingService.parse(fileUpload)
+        val recordEntities = fileParsingService.parse(fileUpload)
 
-        val firstDatalogTimestamp = datalogs.minBy { it.timestamp }.timestamp
-        val lastDatalogTimestamp = datalogs.maxBy { it.timestamp }.timestamp
+        val firstRecordEntityTimestamp = recordEntities.minBy { it.timestamp }.timestamp
+        val lastRecordEntityTimestamp = recordEntities.maxBy { it.timestamp }.timestamp
         val existingSession =
             sessionRepository.findByUserEmailAndStartTimeAndEndTime(
                 fileUpload.metadata.userEmail,
-                firstDatalogTimestamp,
-                lastDatalogTimestamp,
+                firstRecordEntityTimestamp,
+                lastRecordEntityTimestamp,
             )
 
         if (existingSession != null) {
             val message =
                 "A session already exists for user ${fileUpload.metadata.userEmail} " +
-                    "and timestamp $firstDatalogTimestamp - $lastDatalogTimestamp"
+                    "and timestamp $firstRecordEntityTimestamp - $lastRecordEntityTimestamp"
             logger.error(message)
             throw SessionAlreadyExistsException(message)
         }
@@ -71,18 +71,18 @@ class SessionService(
                         userEmail = fileUpload.metadata.userEmail,
                         userFirstName = fileUpload.metadata.userFirstName,
                         userLastName = fileUpload.metadata.userLastName,
-                        startTime = firstDatalogTimestamp,
-                        endTime = lastDatalogTimestamp,
+                        startTime = firstRecordEntityTimestamp,
+                        endTime = lastRecordEntityTimestamp,
                         trackId = fileUpload.metadata.trackId,
                         carId = fileUpload.metadata.carId,
                     ),
                 ).id!!
 
-        datalogRepository.saveAll(datalogs.map { it.copy(sessionId = sessionId) }).collect()
+        recordRepository.saveAll(recordEntities.map { it.copy(sessionId = sessionId) }).collect()
 
         logger.info(
             "Session created for user ${fileUpload.metadata.userEmail} " +
-                "and timestamp $firstDatalogTimestamp - $lastDatalogTimestamp",
+                "and timestamp $firstRecordEntityTimestamp - $lastRecordEntityTimestamp",
         )
         return sessionId
     }
@@ -99,11 +99,11 @@ class SessionService(
             throw SessionDoesNotExistException(message)
         }
 
-        datalogRepository.deleteAllBySessionId(sessionId).collect()
+        recordRepository.deleteAllBySessionId(sessionId).collect()
 
-        val newDatalogs = fileParsingService.parse(fileUpload)
+        val recordEntities = fileParsingService.parse(fileUpload)
 
-        datalogRepository.saveAll(newDatalogs.map { it.copy(sessionId = sessionId) }).collect()
+        recordRepository.saveAll(recordEntities.map { it.copy(sessionId = sessionId) }).collect()
         sessionRepository.save(
             existingSession.copy(
                 carId = fileUpload.metadata.carId,

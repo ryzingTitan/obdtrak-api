@@ -5,8 +5,8 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
-import com.ryzingtitan.obdtrakapi.domain.datalogs.dtos.Datalog
-import com.ryzingtitan.obdtrakapi.domain.datalogs.services.DatalogService
+import com.ryzingtitan.obdtrakapi.domain.records.dtos.Record
+import com.ryzingtitan.obdtrakapi.domain.records.services.RecordService
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,39 +24,39 @@ import org.springframework.test.web.reactive.server.expectBodyList
 import java.time.Instant
 import java.util.UUID
 
-class DatalogControllerTests {
+class RecordControllerTests {
     @Nested
-    inner class GetDatalogsBySessionId {
+    inner class GetRecordsBySessionId {
         @Test
         fun `returns 'OK' status with session data that matches the request parameter`() =
             runTest {
-                whenever(mockDatalogService.getAllBySessionId(sessionId))
-                    .thenReturn(flowOf(firstDatalog, secondDatalog))
+                whenever(mockRecordService.getAllBySessionId(sessionId))
+                    .thenReturn(flowOf(firstRecord, secondRecord))
 
                 webTestClient
                     .get()
-                    .uri("/api/sessions/$sessionId/datalogs")
+                    .uri("/api/sessions/$sessionId/records")
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
                     .isOk
-                    .expectBodyList<Datalog>()
-                    .contains(firstDatalog, secondDatalog)
+                    .expectBodyList<Record>()
+                    .contains(firstRecord, secondRecord)
 
                 assertEquals(1, appender.list.size)
                 assertEquals(Level.INFO, appender.list[0].level)
-                assertEquals("Retrieving datalogs for session id: $sessionId", appender.list[0].message)
+                assertEquals("Retrieving records for session id: $sessionId", appender.list[0].message)
 
-                verify(mockDatalogService, times(1)).getAllBySessionId(sessionId)
+                verify(mockRecordService, times(1)).getAllBySessionId(sessionId)
             }
     }
 
     @BeforeEach
     fun setup() {
-        val datalogController = DatalogController(mockDatalogService)
-        webTestClient = WebTestClient.bindToController(datalogController).build()
+        val recordController = RecordController(mockRecordService)
+        webTestClient = WebTestClient.bindToController(recordController).build()
 
-        logger = LoggerFactory.getLogger(DatalogController::class.java) as Logger
+        logger = LoggerFactory.getLogger(RecordController::class.java) as Logger
         appender = ListAppender()
         appender.context = LoggerContext()
         logger.addAppender(appender)
@@ -67,12 +67,12 @@ class DatalogControllerTests {
     private lateinit var logger: Logger
     private lateinit var appender: ListAppender<ILoggingEvent>
 
-    private val mockDatalogService = mock<DatalogService>()
+    private val mockRecordService = mock<RecordService>()
 
     private val sessionId = UUID.randomUUID()
 
-    private val firstDatalog =
-        Datalog(
+    private val firstRecord =
+        Record(
             sessionId = sessionId,
             timestamp = Instant.now(),
             longitude = -86.14162,
@@ -87,8 +87,8 @@ class DatalogControllerTests {
             airFuelRatio = 14.7f,
         )
 
-    private val secondDatalog =
-        Datalog(
+    private val secondRecord =
+        Record(
             sessionId = sessionId,
             timestamp = Instant.now(),
             longitude = 86.14162,

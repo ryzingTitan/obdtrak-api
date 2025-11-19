@@ -37,8 +37,8 @@ class OpenApiConfiguration(
                 ),
             ).info(
                 Info()
-                    .title("Datalog API")
-                    .description("Swagger spec for the Datalog API project")
+                    .title("OBDTrak API")
+                    .description("Swagger spec for the OBDTrak API project")
                     .version(buildProperties.version),
             )
     }

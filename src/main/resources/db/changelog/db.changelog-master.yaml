@@ -125,16 +125,17 @@ databaseChangeLog:
                     referencedColumnNames: id
 
   - changeSet:
-      id: Create datalogs table
+      id: Create records table
       author: kstoltzfus
       changes:
         - createTable:
-            tableName: datalogs
+            tableName: records
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  autoIncrement: false
+                  defaultValueComputed: ${uuid_function}
                   constraints:
                     primaryKey: true
               - column:
@@ -142,7 +143,7 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_datalog_session_id
+                    foreignKeyName: fk_record_session_id
                     referencedTableName: sessions
                     referencedColumnNames: id
               - column:

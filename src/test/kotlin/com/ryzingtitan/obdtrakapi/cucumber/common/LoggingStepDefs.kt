@@ -9,7 +9,7 @@ import com.ryzingtitan.obdtrakapi.domain.cars.services.CarService
 import com.ryzingtitan.obdtrakapi.domain.sessions.services.FileParsingService
 import com.ryzingtitan.obdtrakapi.domain.sessions.services.SessionService
 import com.ryzingtitan.obdtrakapi.domain.tracks.services.TrackService
-import com.ryzingtitan.obdtrakapi.presentation.controllers.DatalogController
+import com.ryzingtitan.obdtrakapi.presentation.controllers.RecordController
 import com.ryzingtitan.obdtrakapi.presentation.controllers.SessionController
 import io.cucumber.java.After
 import io.cucumber.java.Before
@@ -42,8 +42,8 @@ class LoggingStepDefs {
         sessionControllerLogger = LoggerFactory.getLogger(SessionController::class.java) as Logger
         sessionControllerLogger.addAppender(appender)
 
-        datalogControllerLogger = LoggerFactory.getLogger(DatalogController::class.java) as Logger
-        datalogControllerLogger.addAppender(appender)
+        recordControllerLogger = LoggerFactory.getLogger(RecordController::class.java) as Logger
+        recordControllerLogger.addAppender(appender)
 
         fileParsingServiceLogger = LoggerFactory.getLogger(FileParsingService::class.java) as Logger
         fileParsingServiceLogger.addAppender(appender)
@@ -66,7 +66,7 @@ class LoggingStepDefs {
         appender.stop()
     }
 
-    private lateinit var datalogControllerLogger: Logger
+    private lateinit var recordControllerLogger: Logger
     private lateinit var sessionControllerLogger: Logger
     private lateinit var fileParsingServiceLogger: Logger
     private lateinit var sessionServiceLogger: Logger
