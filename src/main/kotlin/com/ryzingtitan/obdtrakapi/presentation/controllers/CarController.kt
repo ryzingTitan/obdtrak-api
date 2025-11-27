@@ -25,7 +25,7 @@ import java.util.UUID
 @RestController
 @RequestMapping(path = ["/api/cars"])
 class CarController(
-    private val careService: CarService,
+    private val carService: CarService,
 ) {
     @GetMapping
     @Tag(name = "Cars")
@@ -49,7 +49,7 @@ class CarController(
             ),
         ],
     )
-    fun getCars(): Flow<Car> = careService.getAll()
+    fun getCars(): Flow<Car> = carService.getAll()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -86,7 +86,7 @@ class CarController(
     )
     suspend fun createCar(
         @RequestBody carRequest: CarRequest,
-    ): Car = careService.create(carRequest)
+    ): Car = carService.create(carRequest)
 
     @PutMapping("/{carId}")
     @Tag(name = "Car Administration")
@@ -123,7 +123,7 @@ class CarController(
     suspend fun updateCar(
         @PathVariable(name = "carId") carId: UUID,
         @RequestBody carRequest: CarRequest,
-    ): Car = careService.update(carId, carRequest)
+    ): Car = carService.update(carId, carRequest)
 
     @DeleteMapping("/{carId}")
     @Tag(name = "Car Administration")
@@ -155,6 +155,6 @@ class CarController(
     suspend fun deleteCar(
         @PathVariable(name = "carId") carId: UUID,
     ) {
-        careService.delete(carId)
+        carService.delete(carId)
     }
 }
