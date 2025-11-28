@@ -126,14 +126,16 @@ class CarController(
     ): Car = carService.update(carId, carRequest)
 
     @DeleteMapping("/{carId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Tag(name = "Car Administration")
     @Operation(summary = "Delete an existing car")
     @SecurityRequirement(name = "jwt")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "200",
-                description = "Car deleted successfully",
+                responseCode = "204",
+                description = "No Content - Car deleted successfully",
+                content = arrayOf(Content()),
             ),
             ApiResponse(
                 responseCode = "400",

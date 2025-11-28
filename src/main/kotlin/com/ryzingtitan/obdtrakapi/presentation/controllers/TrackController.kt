@@ -126,14 +126,16 @@ class TrackController(
     ): Track = trackService.update(trackId, trackRequest)
 
     @DeleteMapping("/{trackId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Tag(name = "Track Administration")
     @Operation(summary = "Delete an existing track")
     @SecurityRequirement(name = "jwt")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "200",
-                description = "Track deleted successfully",
+                responseCode = "204",
+                description = "No Content - Track deleted successfully",
+                content = arrayOf(Content()),
             ),
             ApiResponse(
                 responseCode = "400",

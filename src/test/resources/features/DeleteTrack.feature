@@ -7,7 +7,7 @@ Feature: Delete track
       | 04d36f86-5f7c-42c5-a87a-7a9ad1418bf0 | Test Track 2 | -90.1374  | 45.4086  |
     And the user has a valid authorization token
     When the track with id '04d36f86-5f7c-42c5-a87a-7a9ad1418bf0' is deleted
-    Then the request response status is 'OK'
+    Then the request response status is 'NO_CONTENT'
     And the following tracks will exist:
       | id                                   | name         | longitude | latitude |
       | fa2d9e99-f6c2-4a90-9573-760e2e29fd6c | Test Track 1 | -86.1374  | 42.4086  |
@@ -21,7 +21,7 @@ Feature: Delete track
       | Test Track 2 | -86.1374  | 42.4086  |
     And the user has a valid authorization token
     When the track with id 'fa2d9e99-f6c2-4a90-9573-760e2e29fd6c' is deleted
-    Then the request response status is 'OK'
+    Then the request response status is 'NO_CONTENT'
     And the following tracks will exist:
       | id                                   | name         | longitude | latitude |
       | 04d36f86-5f7c-42c5-a87a-7a9ad1418bf0 | Test Track 2 | -86.1374  | 42.4086  |
