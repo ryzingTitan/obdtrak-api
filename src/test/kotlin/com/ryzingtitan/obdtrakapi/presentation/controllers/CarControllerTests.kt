@@ -90,7 +90,7 @@ class CarControllerTests {
     @Nested
     inner class DeleteCar {
         @Test
-        fun `returns 'OK' status and deletes car`() =
+        fun `returns 'NO_CONTENT' status and deletes car`() =
             runTest {
                 webTestClient
                     .mutateWith(mockJwt())
@@ -99,7 +99,7 @@ class CarControllerTests {
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
-                    .isOk
+                    .isNoContent
 
                 verify(mockCarService, times(1)).delete(firstCarId)
             }

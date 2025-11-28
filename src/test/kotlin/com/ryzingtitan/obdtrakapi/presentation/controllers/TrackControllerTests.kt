@@ -90,7 +90,7 @@ class TrackControllerTests {
     @Nested
     inner class DeleteTrack {
         @Test
-        fun `returns 'OK' status and deletes track`() =
+        fun `returns 'NO_CONTENT' status and deletes track`() =
             runTest {
                 webTestClient
                     .mutateWith(mockJwt())
@@ -99,7 +99,7 @@ class TrackControllerTests {
                     .accept(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
-                    .isOk
+                    .isNoContent
 
                 verify(mockTrackService, times(1)).delete(firstTrackId)
             }
