@@ -97,6 +97,9 @@ class RecordServiceTests {
             speed = 85,
             throttlePosition = 75.6f,
             airFuelRatio = 15.8f,
+            oilPressure = 45.2f,
+            manifoldPressure = 6.8f,
+            massAirFlow = 40.0f,
         )
 
     private val secondExpectedRecord =
@@ -113,5 +116,8 @@ class RecordServiceTests {
             speed = null,
             throttlePosition = null,
             airFuelRatio = null,
+            oilPressure = null,
+            manifoldPressure = null,
+            massAirFlow = null,
         )
 }

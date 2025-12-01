@@ -66,13 +66,13 @@ class SessionController(
     @ResponseStatus(HttpStatus.CREATED)
     @Suppress("LongParameterList")
     @Tag(name = "Session Administration")
-    @Operation(summary = "Create a new session")
+    @Operation(summary = "Create new sessions")
     @SecurityRequirement(name = "jwt")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "201",
-                description = "Session created successfully",
+                description = "Sessions created successfully",
             ),
             ApiResponse(
                 responseCode = "400",
