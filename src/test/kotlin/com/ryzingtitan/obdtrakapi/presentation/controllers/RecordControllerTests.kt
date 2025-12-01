@@ -85,6 +85,9 @@ class RecordControllerTests {
             speed = 85,
             throttlePosition = 75.6f,
             airFuelRatio = 14.7f,
+            oilPressure = 45.0f,
+            manifoldPressure = 6.5f,
+            massAirFlow = 38.0f,
         )
 
     private val secondRecord =
@@ -101,5 +104,8 @@ class RecordControllerTests {
             speed = 80,
             throttlePosition = 75.0f,
             airFuelRatio = 15.9f,
+            oilPressure = 46.0f,
+            manifoldPressure = 7.0f,
+            massAirFlow = 42.0f,
         )
 }

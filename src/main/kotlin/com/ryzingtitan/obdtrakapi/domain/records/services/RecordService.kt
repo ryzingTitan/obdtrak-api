@@ -29,6 +29,9 @@ class RecordService(
                     recordEntity.speed,
                     recordEntity.throttlePosition,
                     recordEntity.airFuelRatio,
+                    recordEntity.oilPressure,
+                    recordEntity.manifoldPressure,
+                    recordEntity.massAirFlow,
                 )
             }
 }

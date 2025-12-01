@@ -56,11 +56,15 @@ class FileParsingService {
         val latitude = row["Latitude"].toDouble()
         val altitude = row["Altitude"].toFloat()
         val intakeAirTemperature = row["Intake Air Temperature(°F)"].toFloatOrNull()?.toInt()
-        val boostPressure = row["Turbo Boost & Vacuum Gauge(psi)"].toFloatOrNull()
         val coolantTemperature = row["Engine Coolant Temperature(°F)"].toFloatOrNull()?.toInt()
         val engineRpm = row["Engine RPM(rpm)"].toFloatOrNull()?.toInt()
         val speed = row["Speed (OBD)(mph)"].toFloatOrNull()?.toInt()
         val throttlePosition = row["Throttle Position(Manifold)(%)"].toFloatOrNull()
+
+        var boostPressure: Float? = null
+        if (row.isMapped("Turbo Boost & Vacuum Gauge(psi)")) {
+            boostPressure = row["Turbo Boost & Vacuum Gauge(psi)"].toFloatOrNull()
+        }
 
         var airFuelRatio: Float? = null
         if (row.isMapped("Air Fuel Ratio(Measured)(:1)")) {

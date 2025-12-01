@@ -52,6 +52,9 @@ class RecordControllerStepDefs {
             speed = tableRow["speed"]?.toIntOrNull(),
             throttlePosition = tableRow["throttlePosition"]?.toFloatOrNull(),
             airFuelRatio = tableRow["airFuelRatio"]?.toFloatOrNull(),
+            oilPressure = tableRow["oilPressure"]?.toFloatOrNull(),
+            manifoldPressure = tableRow["manifoldPressure"]?.toFloatOrNull(),
+            massAirFlow = tableRow["massAirFlow"]?.toFloatOrNull(),
         )
 
     private suspend fun handleMultipleRecordResponse(clientResponse: ClientResponse) {
