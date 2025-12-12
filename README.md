@@ -15,14 +15,16 @@ A Spring Boot RESTful API for storing and retrieving automotive telemetry data p
 
 ## Technologies
 
-- **Language**: Kotlin 2.0.21
-- **Framework**: Spring Boot 3.5.7 (WebFlux for reactive web)
+- **Language**: Kotlin 2.2.20
+- **Framework**: Spring Boot 4.0.0 (WebFlux for reactive web)
 - **Database**: PostgreSQL 16+ with R2DBC (reactive), Liquibase (migrations)
 - **Security**: Spring Security OAuth2 Resource Server with Auth0 JWT
-- **Testing**: JUnit 5, Mockito-Kotlin, Cucumber (BDD), JaCoCo (coverage)
-- **Code Quality**: ktlint (linting), detekt (static analysis)
-- **Build**: Gradle 9.2+ with Kotlin DSL
+- **Testing**: JUnit 5, Mockito-Kotlin 6.1.0, Cucumber 7.33.0 (BDD), JaCoCo (coverage)
+- **Code Quality**: ktlint 14.0.1 (linting), detekt 2.0.0 (static analysis)
+- **Build**: Gradle 9.2.1 with Kotlin DSL
 - **Runtime**: Java 21
+- **CSV Parsing**: Apache Commons CSV 1.14.1
+- **API Documentation**: SpringDoc OpenAPI 3.0.0
 
 ## Prerequisites
 
