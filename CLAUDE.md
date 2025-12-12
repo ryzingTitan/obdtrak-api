@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-OBDTRAK API is a Spring Boot 3.5 application written in Kotlin that provides a RESTful API for storing and retrieving automotive telemetry data parsed from CSV log files created by the Torque mobile application. The API stores data in PostgreSQL and uses reactive programming with Spring WebFlux and R2DBC.
+OBDTRAK API is a Spring Boot 4.0.0 application written in Kotlin that provides a RESTful API for storing and retrieving automotive telemetry data parsed from CSV log files created by the Torque mobile application. The API stores data in PostgreSQL and uses reactive programming with Spring WebFlux and R2DBC.
 
 ## Build System & Commands
 
@@ -127,10 +127,14 @@ The `FileParsingService` parses Torque CSV files with Apache Commons CSV:
 
 ## Dependencies of Note
 
-- Spring Boot 3.5.7 with WebFlux (reactive web)
-- Kotlin 2.0.21 with coroutines
+- Spring Boot 4.0.0 with WebFlux (reactive web)
+- Kotlin 2.2.20 with coroutines
+- Gradle 9.2.1 with Kotlin DSL
 - R2DBC for reactive database access (PostgreSQL driver)
 - Liquibase for database migrations
-- Apache Commons CSV for parsing Torque files
-- SpringDoc OpenAPI for API documentation
+- Apache Commons CSV 1.14.1 for parsing Torque files
+- SpringDoc OpenAPI 3.0.0 for API documentation
 - Spring Security OAuth2 Resource Server for Auth0 JWT validation
+- Mockito-Kotlin 6.1.0 for testing
+- Cucumber 7.33.0 for BDD integration tests
+- Mock OAuth2 Server 3.0.1 for auth testing
