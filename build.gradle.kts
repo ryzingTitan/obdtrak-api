@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "com.ryzingtitan"
-version = "6.1.0"
+version = "6.2.0"
 
 java {
     toolchain {
@@ -115,4 +115,8 @@ fun isNonStable(version: String): Boolean {
 
 springBoot {
     buildInfo()
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    jvmArgs = listOf("-XX:MaxDirectMemorySize=256m")
 }
